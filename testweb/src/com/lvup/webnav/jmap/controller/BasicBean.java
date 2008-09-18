@@ -33,8 +33,6 @@ import org.apache.commons.lang.StringUtils;
  */
 public abstract class BasicBean {
 
-    private Locale locale = Locale.getDefault();
-    
     protected boolean formValid = true;
     
     private List<String> errorMessage = null;
@@ -48,7 +46,8 @@ public abstract class BasicBean {
     public String getMessage(Message message) {
         String msg = message.value();
         try {
-            ResourceBundle res = getResource(message.resource(), getLocale());
+            ResourceBundle res = getResource(message.resource(), 
+                    getController().getLocale());
             msg = res.getString(message.value());
         } catch (MissingResourceException e) {
             ControllerBase.logger.warn("Cannot locate the resource. " +
@@ -75,6 +74,24 @@ public abstract class BasicBean {
         this.formValid = false;
     }
 
+    /**
+     * This method use the annotations to validating fields and set the
+     * fromValid field with false if one field validates failed. The multi-
+     * languages error messages will be appended to the list of errorMessage
+     * field. You can use the getFormattedErrorMessage() method to format a 
+     * ul/li html error messages. If you donot like this kind of format, you 
+     * may override this method for other new format.
+     * At the end of this method, call the BeanUtils.populate to copy all
+     * form values to the inherited class fields with public getter and setter
+     * what ever any validating failed. You may override this method and
+     * call the super.initFormValues first and call some additional validating
+     * code for more customizing validation.
+     * This method will be called by the ControllerBase.createBean 
+     * and this method can be overrided for different behaves.
+     * @param controller the caller
+     * @throws java.lang.IllegalAccessException
+     * @throws java.lang.reflect.InvocationTargetException
+     */
     public void initFormValues(ControllerBase controller) 
             throws IllegalAccessException, InvocationTargetException {
         
@@ -281,14 +298,6 @@ public abstract class BasicBean {
     
     public ResourceBundle getResource(String resource, Locale locale) {
         return ResourceBundle.getBundle(resource, locale);
-    }
-
-    public Locale getLocale() {
-        return this.locale;
-    }
-
-    public void setLocale(Locale locale) {
-        this.locale = locale;
     }
 
     public List<String> getErrorMessage() {
