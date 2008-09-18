@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Locale;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,8 @@ public abstract class ControllerBase {
     private HttpServletRequest request;
     private HttpServletResponse response;
     private JMapServlet servlet;
+    
+    private Locale locale = Locale.getDefault();
     
     private String actionMethod = null;
     
@@ -130,5 +133,13 @@ public abstract class ControllerBase {
 
     public void setActionMethod(String actionMethod) {
         this.actionMethod = actionMethod;
+    }
+
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 }
