@@ -1,0 +1,10 @@
+This is a java web framework like Rails does.
+
+= Introduction =
+
+Look at this URI: /jmap/main/login/some-hint-like-a-id
+* /jmap is the Java Web Context path for the web application,
+* /main is the servlet map path and defined as pattern /main/* in web.xml. And this name
+`main' will be translated as package.prefixname.Main java class
+* and after the /main/ is all in path_info, but the first word '/login' will be mapped to the method: public void Login(String httpMethod, String hint) in the `Main' class. A String 'some-hint-like-a-id' will be passed to the parameter `hint'.
+
