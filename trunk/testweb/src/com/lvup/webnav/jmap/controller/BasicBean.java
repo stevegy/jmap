@@ -98,24 +98,7 @@ public abstract class BasicBean {
         this.controller = controller;
         
         Map param = this.controller.getRequest().getParameterMap();
-        Iterator it = param.keySet().iterator();
-        while (it.hasNext()) {
-            String key = (String) it.next();
-            String[] value = (String[]) param.get(key);
-            try {
-                Field field = this.getClass().getDeclaredField(key);
-                if (PropertyUtils.isWriteable(this, key) &&
-                        PropertyUtils.isReadable(this, key)) {
-                    // validate
-                    Annotation[] fas = field.getAnnotations();
-                    for (Annotation a : fas) {
-                        validateField(a, key, value);
-                    }
-                }
-            } catch (NoSuchFieldException e) {
-                ControllerBase.logger.info("field not found, name is " + key);
-            }
-        }
+        validateFormMap(param);
         BeanUtils.populate(this, param);
     }
 
@@ -336,6 +319,26 @@ public abstract class BasicBean {
 
     public void setController(ControllerBase controller) {
         this.controller = controller;
+    }
+
+    protected void validateFormMap(Map param) throws InvocationTargetException, SecurityException, IllegalArgumentException, IllegalAccessException {
+        Iterator it = param.keySet().iterator();
+        while (it.hasNext()) {
+            String key = (String) it.next();
+            String[] value = (String[]) param.get(key);
+            try {
+                Field field = this.getClass().getDeclaredField(key);
+                if (PropertyUtils.isWriteable(this, key) && PropertyUtils.isReadable(this, key)) {
+                    // validate
+                    Annotation[] fas = field.getAnnotations();
+                    for (Annotation a : fas) {
+                        validateField(a, key, value);
+                    }
+                }
+            } catch (NoSuchFieldException e) {
+                ControllerBase.logger.info("field not found, name is " + key);
+            }
+        }
     }
 
 }
