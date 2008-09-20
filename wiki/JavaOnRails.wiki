@@ -1,10 +1,16 @@
-This is a java web framework like Rails does.
+=A java web framework like Rails does=
 
-= Introduction =
+== Introduction ==
 
-Look at this URI: /jmap/main/login/some-hint-like-a-id
-* /jmap is the Java Web Context path for the web application,
-* /main is the servlet map path and defined as pattern /main/* in web.xml. And this name
-`main' will be translated as package.prefixname.Main java class
-* and after the /main/ is all in path_info, but the first word '/login' will be mapped to the method: public void Login(String httpMethod, String hint) in the `Main' class. A String 'some-hint-like-a-id' will be passed to the parameter `hint'.
+Look at this URI: */jmap/main/login/some-hint-like-a-id*
 
+ * */jmap* is the Java Web Context path for the web application. This context path will be mapped to the web server. This name may be changed by the web application deployer and can be any name. So, it cannot be a class name mapping rule to use.
+
+ * */main* is the servlet map path and defined as pattern `"/main/*"` in web.xml. This name `main` will be translated as package.prefixname.Main java class.
+
+ * and after the /main/ is all in path_info, but the first word */login* will be mapped to the method: 
+ `public void Login(String httpMethod, String hint)` in the `Main` class. 
+
+ The `httpMethod` will be *"GET"* or *"POST"*.
+
+ A String 'some-hint-like-a-id' will be passed to the parameter `hint`.
