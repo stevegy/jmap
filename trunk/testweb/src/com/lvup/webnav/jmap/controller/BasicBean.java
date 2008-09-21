@@ -44,14 +44,18 @@ public abstract class BasicBean {
     }
     
     public String getMessage(Message message) {
-        String msg = message.value();
+        return getMessage(message.value(), message.resource());
+    }
+    
+    public String getMessage(String msgId, String msgpath) {
+        String msg = "";
         try {
-            ResourceBundle res = getResource(message.resource(), 
+            ResourceBundle res = getResource(msgpath, 
                     getController().getLocale());
-            msg = res.getString(message.value());
+            msg = res.getString(msgId);
         } catch (MissingResourceException e) {
             ControllerBase.logger.warn("Cannot locate the resource. " +
-                    message.resource() + "->" + message.value());
+                    msgpath + "->" + msgId);
         } catch (NullPointerException e) {
             ControllerBase.logger.error("NullPointerException for the message.", e);
         }
@@ -328,7 +332,7 @@ public abstract class BasicBean {
             String[] value = (String[]) param.get(key);
             try {
                 Field field = this.getClass().getDeclaredField(key);
-                if (PropertyUtils.isWriteable(this, key) && PropertyUtils.isReadable(this, key)) {
+                if (PropertyUtils.isWriteable(this, key)) {
                     // validate
                     Annotation[] fas = field.getAnnotations();
                     for (Annotation a : fas) {

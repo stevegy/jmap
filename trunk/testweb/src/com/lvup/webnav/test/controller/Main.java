@@ -2,6 +2,7 @@ package com.lvup.webnav.test.controller;
 
 import com.lvup.webnav.jmap.controller.*;
 import com.lvup.webnav.test.bean.main.Login;
+import com.lvup.webnav.test.bean.main.Upload;
 import java.util.HashMap;
 
 public class Main extends ControllerBase {
@@ -29,7 +30,7 @@ public class Main extends ControllerBase {
             this.getRequest().setAttribute("p", p);
     }
 
-    public void Index(String httpMethod, String hint) {
+    public void Index(String hint) {
         try {
             // supply the basic bean class and deal with the file upload or 
             // normally POST or GET data
@@ -47,12 +48,12 @@ public class Main extends ControllerBase {
      * @param httpMethod
      * @param hint
      */
-    public void IndexHtml(String httpMethod, String hint) {
-        this.Index(httpMethod, hint);
+    public void IndexHtml(String hint) {
+        this.Index(hint);
     }
     
-    @CreateBean(beanClassName="com.lvup.webnav.test.bean.main.Login", requestAttrName="MainLogin")
-    public void Login(String httpMethod, String hint) {
+    //@CreateBean(beanClassName="com.lvup.webnav.test.bean.main.Login", requestAttrName="MainLogin")
+    public void Login(String hint) {
         try {
             // Login login = (Login) createBean();
             // this.getRequest().setAttribute("MainLogin", login);
@@ -60,11 +61,28 @@ public class Main extends ControllerBase {
             Login login = (Login) getRequest().getAttribute("MainLogin");
             
             this.p.put("pageContent", "/mains/login.jsp");
-            this.p.put("title", "Login " + httpMethod);
+            this.p.put("title", "Login " + getRequest().getMethod());
             this.render(INDEX_JSP);
         } catch(Exception ex) {
-            ex.printStackTrace();
+            logger.error("", ex);
         }    
+    }
+    
+    @CreateBean(createOnHttpMethod={"POST"})
+    public void Upload(String hint) {
+        try {
+            if("POST".equals(getRequest().getMethod())) {
+                Upload upload = (Upload) getRequest().getAttribute("MainUpLoad");
+                // do something with upload ...
+           }
+            
+            
+            p.put("pageContent", "/mains/upload.jsp");
+            p.put("title", "Upload file test");
+        this.render(INDEX_JSP);
+        } catch (Exception e) {
+            logger.error("", e);
+        }
     }
 
 }
