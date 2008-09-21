@@ -17,6 +17,7 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 
 import com.lvup.webnav.jmap.controller.ControllerBase;
 import com.lvup.webnav.jmap.controller.CreateBean;
+import java.util.Arrays;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -27,11 +28,13 @@ public class JMapServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     
-    private static final Class[] webMethodArgs = {String.class, String.class};
+    private static final Class[] webMethodArgs = {String.class};
 
     private String prefixPackageName = "";
     
     public static final String CONTROLLER_PACKAGE = "controller.";
+    
+    public static final String BEAN_PACKAGE = "bean.";
 
     private String characterEncoding;
     
@@ -84,45 +87,80 @@ public class JMapServlet extends HttpServlet {
 
     /**
      * You can override this method for other different behave.
-     * @param m the caller method
+     * @param cb is a annotation class of CreateBean
      * @param controller the controller class instance
-     * @param clz the string array, [0] is the controller's simple class name,
-     * [1] is the method name, [2] is the hint string
-     * @param request the HttpServletRequest object
      * @throws java.lang.reflect.InvocationTargetException
      * @throws java.lang.InstantiationException
      * @throws java.lang.IllegalAccessException
      */
-    protected void createBean(Method m, ControllerBase controller, 
-            String[] clz, HttpServletRequest request) 
+    protected BasicBean createBean(CreateBean cb, ControllerBase controller) 
             throws InvocationTargetException, 
             InstantiationException, IllegalAccessException {
-
-        CreateBean cb = m.getAnnotation(CreateBean.class);
+        
+        String controllerClassName = controller.getClass().getSimpleName();
         String beanClassname = null;
         String attrName = null;
+        String[] httpm = {"GET", "POST"};
+        BasicBean bean = null;
         if (cb == null) {
-            beanClassname = controller.getBeanClassName(clz[1]);
-            logger.debug("CreateBean is null, default bean class name is " + beanClassname);
-            attrName = clz[0] + clz[1];
+            beanClassname = getBeanClassName(controller, controller.getActionMethod());
+            logger.debug("CreateBean is null, default bean class name is " 
+                    + beanClassname);
+            attrName = controllerClassName + controller.getActionMethod();
             logger.debug("The bean Request attribute name is " + attrName);
         } else if (cb.create()) {
-            beanClassname = StringUtils.isEmpty(cb.beanClassName()) ? controller.getBeanClassName(clz[1]) : cb.beanClassName();
-            attrName = StringUtils.isEmpty(cb.requestAttrName()) ? clz[0] + clz[1] : cb.requestAttrName();
-            logger.debug("The CreateBean is true, bean class name is " + beanClassname);
+            httpm = cb.createOnHttpMethod();
+            beanClassname = StringUtils.isEmpty(cb.beanClassName()) ? 
+                getBeanClassName(controller, controller.getActionMethod()) : cb.beanClassName();
+            attrName = StringUtils.isEmpty(cb.requestAttrName()) ? 
+                controllerClassName + controller.getActionMethod() : cb.requestAttrName();
+            logger.debug("The CreateBean is true, bean class name is "
+                    + beanClassname);
             logger.debug("The bean Request attribute name is " + attrName);
         }
         try {
-            if (StringUtils.isNotEmpty(beanClassname)) {
-                BasicBean bean = controller.createBean(beanClassname);
-                request.setAttribute(attrName, bean);
+            boolean createOnHttpMethod = false;
+            String httpMethod = controller.getRequest().getMethod();
+            if(httpm != null) {
+                for(String method : httpm) {
+                    httpMethod.equals(method);
+                    createOnHttpMethod = true;
+                    break;
+                }
+            }
+            logger.debug("the createOnHttpMethod is " + Arrays.toString(httpm)
+                    + ". The current HTTP method is " + httpMethod + ".");
+            if (StringUtils.isNotEmpty(beanClassname) && createOnHttpMethod) {
+                bean = createBean(controller, beanClassname);
+                controller.getRequest().setAttribute(attrName, bean);
             }
         } catch (ClassNotFoundException e) {
             // do nothing
             logger.info("Cannot find the bean class " + beanClassname);
         }
+        return bean;
     }
-
+    /**
+     * 
+     * create and initialize the bean by the default rule.
+     * the rule to find the bean is: packagePrefix + BEAN_PACKAGE + beanSimpleName
+     * create this instance and call the abstract method init()
+     * if the beanSimpleName contains '.', this name will be treated as full class
+     * name, so the beanSimpleName will not add the package prefix name.
+     * @param beanSimpleName, this is a simple class name, has no package name
+     * @return
+     */
+    public BasicBean createBean(ControllerBase controller, String beanSimpleName) 
+            throws InstantiationException, IllegalAccessException, 
+            ClassNotFoundException, InvocationTargetException {
+        BasicBean bean = null;
+        String classname = getBeanClassName(controller, beanSimpleName);
+        Class classbean = Class.forName(classname);
+        bean = (BasicBean) classbean.newInstance();
+        bean.initFormValues(controller);
+        bean.execute();
+        return bean;
+    }
     /**
      * return the class name in String[0], 
      * action method name in String[1],
@@ -178,6 +216,14 @@ public class JMapServlet extends HttpServlet {
         return this.normalizeName(StringUtils.substring(servletPath, 1));
     }
 
+    public String getBeanClassName(ControllerBase controller, String beanName) {
+        return (beanName.indexOf('.') > -1) ? 
+            beanName : 
+            this.getPrefixPackageName() 
+            + BEAN_PACKAGE + controller.getClass().getSimpleName().toLowerCase() 
+            + "." + beanName;
+    }
+
     /**
      * get the prefix name from the web.xml? 
      * @return the controller and other class package's prefix name
@@ -195,8 +241,6 @@ public class JMapServlet extends HttpServlet {
      * 
      * @param request
      * @param response
-     * @param method
-     *            is "GET", "POST", "HEAD", "PUT", ...
      * @throws ServletException
      * @throws IOException
      * @throws ClassNotFoundException
@@ -204,7 +248,7 @@ public class JMapServlet extends HttpServlet {
      * @throws InstantiationExceptiond
      */
     protected void processRequest(HttpServletRequest request,
-            HttpServletResponse response, String httpMethod)
+            HttpServletResponse response)
             throws ServletException, IOException {
         try {
             response.setCharacterEncoding(characterEncoding);
@@ -226,8 +270,9 @@ public class JMapServlet extends HttpServlet {
             controller.setResponse(response);
             controller.setActionMethod(clz[1]);
             controller.init();
-            createBean(m, controller, clz, request);
-            m.invoke(oc, httpMethod, clz[2]);
+            createBean(m.getAnnotation(CreateBean.class), 
+                    controller);
+            m.invoke(oc, clz[2]);
         } catch (ClassNotFoundException e) {
             // 404 response
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -287,7 +332,7 @@ public class JMapServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-        this.processRequest(request, response, "GET");
+        this.processRequest(request, response);
     }
 
     /**
@@ -296,6 +341,6 @@ public class JMapServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-        this.processRequest(request, response, "POST");
+        this.processRequest(request, response);
     }
 }

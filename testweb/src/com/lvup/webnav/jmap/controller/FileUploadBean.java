@@ -10,17 +10,24 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadBase.FileSizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 /**
- *
+ * You can override the "initFormValues" method to setFilesizeLimit(),
+ * setRequestSizeLimit(), setMemorySize(), setTempFileDir() to control the
+ * file upload behave.
+ * The default size of requestSizeLimit is 4M, and default file size limit is 2M.
+ * If the file size limit exceed, isFileSizeOver() will be true.
+ * 
  * @author Steve Yao <steve.yao@lvup.com>
  */
 public abstract class FileUploadBean extends BasicBean {
@@ -29,59 +36,94 @@ public abstract class FileUploadBean extends BasicBean {
     
     private String tempFileDir = System.getProperty("java.io.tmpdir");
     
-    private int filesizeLimit = 2000 * 1024; // 2M
+    private long filesizeLimit = 2000 * 1024; // 2M
+    
+    private long requestSizeLimit = 4000 * 1024; // 4M
     
     private boolean fileSizeOver = false;
     
-    private Map formValueMap = null;
+    protected Map formValueMap = null;
     
-    private List<FileItem> uploadFiles;
+    protected List<FileItem> uploadFiles;
     
+    /**
+     * This method can be override to set the file size limit and other upload
+     * parameters use the setters in this object.
+     * 
+     * @param controller
+     * @throws java.lang.IllegalAccessException
+     * @throws java.lang.reflect.InvocationTargetException
+     */
     @Override 
     public void initFormValues(ControllerBase controller) 
             throws IllegalAccessException, InvocationTargetException {
         
         this.setController(controller);
-        try {
-            if(! ServletFileUpload.isMultipartContent(controller.getRequest())) {
-                super.initFormValues(controller);
-            } else {
-                DiskFileItemFactory factory = 
-                        new DiskFileItemFactory(getMemorySize(),
-                        new File(getTempFileDir()));
-                ServletFileUpload upload = new ServletFileUpload(factory);
-                upload.setFileSizeMax(filesizeLimit);
-                String encoding = controller.getRequest().getCharacterEncoding();
-                upload.setHeaderEncoding(encoding);
-                List<FileItem> items = upload.parseRequest(controller.getRequest());
+        if(! ServletFileUpload.isMultipartContent(controller.getRequest())) {
+            super.initFormValues(controller);
+        } else {
+            DiskFileItemFactory factory = 
+                    new DiskFileItemFactory(getMemorySize(),
+                    new File(getTempFileDir()));
+            ServletFileUpload upload = new ServletFileUpload(factory);
+            upload.setFileSizeMax(getFilesizeLimit());
+            upload.setSizeMax(getRequestSizeLimit());
+            String encoding = controller.getRequest().getCharacterEncoding();
+            upload.setHeaderEncoding(encoding);
+            List<FileItem> items = null;
+            try {
+                items = upload.parseRequest(controller.getRequest());
+            } catch (FileSizeLimitExceededException e) {
+                fileSizeOver = true;
+                ControllerBase.logger.warn("File size limit exceeds.", e);
+            } catch (SizeLimitExceededException e) {
+                fileSizeOver = true;
+                ControllerBase.logger.warn("Request size over the size limit " 
+                        + getFilesizeLimit()  + " bytes.");
+            } catch (FileUploadException e) {
+                ControllerBase.logger.error("File upload exception.", e);
+            }
+            try {
+                String key = null;
+                ArrayList<String> value = null;
+                if(items == null)
+                    return;
                 for(FileItem item : items) {
                     if(item.isFormField()) {
                         if(formValueMap == null) {
                             formValueMap = new HashMap();
                         }
-                        formValueMap.put(item.getFieldName(), 
-                                item.getString(encoding));
-                    } else {
+                        key = item.getFieldName();
+                        if(formValueMap.containsKey(key)) {
+                            value = (ArrayList<String>)formValueMap.get(key);
+                        } else {
+                            value = new ArrayList<String>();
+                        }
+                        value.add(item.getString(encoding));
+                        formValueMap.put(key, value);
+                    } else if(item.getSize() > 0) {
                         if(uploadFiles == null) {
                             uploadFiles = new ArrayList<FileItem> ();
                         }
                         uploadFiles.add(item);
                     }
                 }
-                this.validateFormMap(formValueMap);
-                BeanUtils.populate(this, formValueMap);
+                if(formValueMap != null) {
+                    Iterator it = formValueMap.keySet().iterator();
+                    while(it.hasNext()) {
+                        key = (String) it.next();
+                        value = (ArrayList<String>)formValueMap.get(key);
+                        String[] a = {};
+                        formValueMap.put(key, value.toArray(a));
+                    }
+                }
+            } catch (UnsupportedEncodingException ex) {
+                // ? encoding error ?
+                ControllerBase.logger.error("Request encoding error?", ex);
             }
-        } catch (UnsupportedEncodingException e) {
-            ControllerBase.logger.error("The encoding error!", e);
+            this.validateFormMap(formValueMap);
+            BeanUtils.populate(this, formValueMap);
         }
-        catch (SizeLimitExceededException e) {
-            fileSizeOver = true;
-            ControllerBase.logger.warn("File size over the size limit " 
-                    + getFilesizeLimit()  + " bytes.");
-        } catch (FileUploadException e) {
-            ControllerBase.logger.error("", e);
-        }
-        
     }
 
     public int getMemorySize() {
@@ -100,14 +142,18 @@ public abstract class FileUploadBean extends BasicBean {
         this.tempFileDir = tempFileDir;
     }
 
-    public int getFilesizeLimit() {
+    public long getFilesizeLimit() {
         return filesizeLimit;
     }
 
-    public void setFilesizeLimit(int filesizeLimit) {
+    public void setFilesizeLimit(long filesizeLimit) {
         this.filesizeLimit = filesizeLimit;
     }
 
+    /**
+     * If the file size limit exceed, this value will be true.
+     * @return
+     */
     public boolean isFileSizeOver() {
         return fileSizeOver;
     }
@@ -118,5 +164,13 @@ public abstract class FileUploadBean extends BasicBean {
 
     public List<FileItem> getUploadFiles() {
         return uploadFiles;
+    }
+
+    public long getRequestSizeLimit() {
+        return requestSizeLimit;
+    }
+
+    public void setRequestSizeLimit(long requestSizeLimit) {
+        this.requestSizeLimit = requestSizeLimit;
     }
 }

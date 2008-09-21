@@ -23,25 +23,16 @@ public abstract class ControllerBase {
     
     private String actionMethod = null;
     
-    public static final String BEAN_PACKAGE = "bean.";
+    public static String STD_ERROR_MSG_RESOURCE = "com/lvup/webnav/jmap/validator/errmessages";
     
     public static Log logger = LogFactory.getLog(ControllerBase.class);
     
     /**
      * This method is for the "/" uri
-     * @param httpMethod
      * @param hint
      */
-    public abstract void Index(String httpMethod, String hint);
+    public abstract void Index(String hint);
 
-    public String getBeanClassName(String beanName) {
-        return (beanName.indexOf('.') > -1) ? 
-            beanName : 
-            this.getServlet().getPrefixPackageName() 
-            + BEAN_PACKAGE + this.getClass().getSimpleName().toLowerCase() 
-            + "." + beanName;
-    }
-    
     /**
      * this method will be called after the setServlet(), setRequest() and 
      * setResponse(). So, in this overrided function, the request, servlet and
@@ -67,28 +58,6 @@ public abstract class ControllerBase {
     }
     
     /**
-     * 
-     * create and initialize the bean by the default rule.
-     * the rule to find the bean is: packagePrefix + BEAN_PACKAGE + beanName
-     * create this instance and call the abstract method init()
-     * if the beanName contains '.', this name will be treated as full class
-     * name, so the beanName will not add the package prefix name.
-     * @param beanName
-     * @return
-     */
-    public BasicBean createBean(String beanName) 
-            throws InstantiationException, IllegalAccessException, 
-            ClassNotFoundException, InvocationTargetException {
-        BasicBean bean = null;
-        String classname = getBeanClassName(beanName);
-        Class classbean = Class.forName(classname);
-        bean = (BasicBean) classbean.newInstance();
-        bean.initFormValues(this);
-        bean.execute();
-        return bean;
-    }
-    
-    /**
      * Use the action method name to find the bean name.
      * If your package prefix name is "com.lvup.web.test." and the 
      * action method is "Login", then the class name should be 
@@ -100,7 +69,7 @@ public abstract class ControllerBase {
      */
     public BasicBean createBean() throws InstantiationException, 
             IllegalAccessException, ClassNotFoundException, InvocationTargetException {
-        return createBean(this.getActionMethod());
+        return getServlet().createBean(this, this.getActionMethod());
     }
     
     public void setRequest(HttpServletRequest request) {

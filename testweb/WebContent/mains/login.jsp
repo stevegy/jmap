@@ -3,6 +3,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <div>${MainLogin.formattedErrorMessage}</div>
+<p>chkTest value is ${MainLogin.chkTest[0]}, ${MainLogin.chkTest[1]}, ${MainLogin.chkTest[2]}</p>
 <div>
     <form id="frmLogin" name="frmLogin" method="post" action="login">
     <dl>
