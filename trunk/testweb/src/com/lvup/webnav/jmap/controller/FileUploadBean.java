@@ -36,7 +36,7 @@ public abstract class FileUploadBean extends BasicBean {
     
     private String tempFileDir = System.getProperty("java.io.tmpdir");
     
-    private long filesizeLimit = 2000 * 1024; // 2M
+    private long fileSizeLimit = 2000 * 1024; // 2M
     
     private long requestSizeLimit = 4000 * 1024; // 4M
     
@@ -66,7 +66,7 @@ public abstract class FileUploadBean extends BasicBean {
                     new DiskFileItemFactory(getMemorySize(),
                     new File(getTempFileDir()));
             ServletFileUpload upload = new ServletFileUpload(factory);
-            upload.setFileSizeMax(getFilesizeLimit());
+            upload.setFileSizeMax(getFileSizeLimit());
             upload.setSizeMax(getRequestSizeLimit());
             String encoding = controller.getRequest().getCharacterEncoding();
             upload.setHeaderEncoding(encoding);
@@ -75,11 +75,12 @@ public abstract class FileUploadBean extends BasicBean {
                 items = upload.parseRequest(controller.getRequest());
             } catch (FileSizeLimitExceededException e) {
                 fileSizeOver = true;
-                ControllerBase.logger.warn("File size limit exceeds.", e);
+                ControllerBase.logger.warn("File size limit exceeds, the limit is "
+                        + getFileSizeLimit() + " bytes.", e);
             } catch (SizeLimitExceededException e) {
                 fileSizeOver = true;
                 ControllerBase.logger.warn("Request size over the size limit " 
-                        + getFilesizeLimit()  + " bytes.");
+                        + getRequestSizeLimit()  + " bytes.", e);
             } catch (FileUploadException e) {
                 ControllerBase.logger.error("File upload exception.", e);
             }
@@ -142,12 +143,12 @@ public abstract class FileUploadBean extends BasicBean {
         this.tempFileDir = tempFileDir;
     }
 
-    public long getFilesizeLimit() {
-        return filesizeLimit;
+    public long getFileSizeLimit() {
+        return fileSizeLimit;
     }
 
-    public void setFilesizeLimit(long filesizeLimit) {
-        this.filesizeLimit = filesizeLimit;
+    public void setFileSizeLimit(long filesizeLimit) {
+        this.fileSizeLimit = filesizeLimit;
     }
 
     /**
