@@ -6,7 +6,8 @@
 Look at this URI: */jmap/main/login/some-hint-like-a-id*
 
  * */jmap* is the Java Web Context path for the web application. This context path will be mapped to the web server. This name may be changed by the web application deployer and can be any name. So, it cannot be a class name mapping rule to use.
- * */main* is the servlet map path and defined as pattern `"/main/*"` in web.xml. This name `main` will be translated as package.prefixname.Main java class.
+ * */main* is the servlet map path and defined as pattern `"/main/*"` in web.xml. This name `main` will be translated as package.prefixname.Main java class. 
+ This controller class should be extends from the `com.lvup.webnav.jmap.controller.ControllerBase`. The `ControllerBase` provide many basic methods to connect the servlet context with controller. And the ControllerBase also provide a jsp file render method. You may refer to the source code of this class, or, you can refer to the example code `com.lvup.webnav.jmap.test.controller.Main.java`.
  * and after the /main/ is all in path_info, but the first word */login* will be mapped to the method: 
  `public void Login(String hint)` in the `Main` class. A String 'some-hint-like-a-id' will be passed to the parameter `hint`.
 
@@ -26,3 +27,5 @@ You can add an annotation `@CreateBean` to the controller class method `Login` t
  If you donot like this *_default rule_* name, you also can assign another one use these annotation attributes.
 
 You may refer to the example page in the source package. There is a java bean to map the web request form values for `/main/login` page and bean's class is com.lvup.webnav.test.bean.main.Login. 
+
+You can find the class `Login` is extends from `BasicBean`. The form bean should be extended from the `BasicBean` or `FileUploadBean`. Actually, the `FileUploadBean` extends the `BasicBean` and override the `initFormValues` method to handle the `multipart/form-data` form enctype. If your bean should accept the file upload form data, you should declare the bean to extend the `FileUploadBean`.
