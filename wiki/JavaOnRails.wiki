@@ -2,6 +2,7 @@
 
 == Introduction ==
 
+=== Action mapping ===
 Look at this URI: */jmap/main/login/some-hint-like-a-id*
 
  * */jmap* is the Java Web Context path for the web application. This context path will be mapped to the web server. This name may be changed by the web application deployer and can be any name. So, it cannot be a class name mapping rule to use.
@@ -12,3 +13,14 @@ Look at this URI: */jmap/main/login/some-hint-like-a-id*
  `public void Login(String hint)` in the `Main` class. 
 
  A String 'some-hint-like-a-id' will be passed to the parameter `hint`.
+
+=== Form values validating and mapping ===
+If you leave the controller method `Login` without annotation, the default java bean class will been looking for with this rule:
+
+ The default form bean class full name will be (package.prefixname.)bean.(servlet-path-name).(response-method-name). The `bean.` is a fixed name that will be added automatically.
+
+ So, the last example URI: */jmap/main/login/some-hint-like-a-id* will be mapped to a java bean class name: (package.prefixname.)bean.main.Login.java. 
+
+You can add an annotation `@CreateBean` to the controller class method `Login` to control the form value bean creating rule. 
+
+You can refer to the example page in the source package. There is a java bean to map the web request form values for `/main/login` page and bean's class is com.lvup.webnav.test.bean.main.Login. 
