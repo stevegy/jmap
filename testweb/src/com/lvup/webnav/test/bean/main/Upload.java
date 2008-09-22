@@ -22,7 +22,7 @@ public class Upload extends FileUploadBean{
     
     @Override
     public void initFormValues(ControllerBase controller) throws IllegalAccessException, InvocationTargetException {
-        this.setFilesizeLimit(50*1024); // shrink to 50K
+        this.setFileSizeLimit(50*1024); // shrink to 50K
         
         super.initFormValues(controller);
         
@@ -32,7 +32,7 @@ public class Upload extends FileUploadBean{
             this.appendErrorMessage(String.format( 
                     this.getMessage("std.filesizelimit", 
                     ControllerBase.STD_ERROR_MSG_RESOURCE), 
-                    this.getFilesizeLimit()));
+                    this.getFileSizeLimit()));
         }
     }
     
