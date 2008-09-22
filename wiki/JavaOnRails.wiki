@@ -30,4 +30,4 @@ You may refer to the example page in the source package. There is a java bean to
 
 You can find the class `Login` is extends from `BasicBean`. The form bean should be extended from the `BasicBean` or `FileUploadBean`. Actually, the `FileUploadBean` extends the `BasicBean` and override the `initFormValues` method to handle the `multipart/form-data` form enctype. If your bean should accept the file upload form data, you should declare the bean to extend the `FileUploadBean`.
 
-Until now, I provide `@Required`, `@MaxLength`, `@MinLength`, `@RulePattern` field annotations to mark the form field validation rules. You can refer to the bean class `Login` in source code and take a look to the field `loginName` for example.
+Until now, I provide `@Required`, `@MaxLength`, `@MinLength`, `@RulePattern` field annotations to mark the form field validation rules. You can refer to the bean class `Login` in source code and take a look at the field `loginName` for example.
