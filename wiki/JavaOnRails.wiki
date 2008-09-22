@@ -15,12 +15,19 @@ Look at this URI: */jmap/main/login/some-hint-like-a-id*
  A String 'some-hint-like-a-id' will be passed to the parameter `hint`.
 
 === Form values validating and mapping ===
-If you leave the controller method `Login` without annotation, the default java bean class will been looking for with this rule:
+If you leave the controller method `Login` without annotation, the default java bean class will been looking for in this rule:
 
  The default form bean class full name will be (package.prefixname.)bean.(servlet-path-name).(response-method-name). The `bean.` is a fixed name that will be added automatically.
 
  So, the last example URI: */jmap/main/login/some-hint-like-a-id* will be mapped to a java bean class name: (package.prefixname.)bean.main.Login.java. 
 
-You can add an annotation `@CreateBean` to the controller class method `Login` to control the form value bean creating rule. 
+You can add an annotation `@CreateBean` to the controller class method `Login` to control the form value bean creating rule. These annotation attributes are:
 
-You can refer to the example page in the source package. There is a java bean to map the web request form values for `/main/login` page and bean's class is com.lvup.webnav.test.bean.main.Login. 
+ * `create`: default value is `true`. This flag can be assigned to `false` that the framework will not create any bean class for form values mapping.
+
+ * `createOnHttpMethod`: default value is a String array, `{"GET", "POST"}`. This value can control the bean creating when the HTTP method is `GET` or `POST`. If you want the bean to be created just only when a `HTTP POST` request come in, you can assign this value to `{"POST"}`.
+
+ * `requestAttrName`: default is an empty string "". This empty string means _"use the *default rule* to create a request scope attribute key name"_. The *_default rule_* means the controller class name and method name. For example, the last URI /main/login will create a attribute key name is `MainLogin`. The created java bean instance will be put in the request scope object with `request.setAttribute("MainLogin", LoginInstance);`.
+ If you donot like this *_default rule_* name, you also can assign another one use this annotation attribute.
+
+You may refer to the example page in the source package. There is a java bean to map the web request form values for `/main/login` page and bean's class is com.lvup.webnav.test.bean.main.Login. 
