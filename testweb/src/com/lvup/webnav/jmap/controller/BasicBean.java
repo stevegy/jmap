@@ -340,7 +340,9 @@ public abstract class BasicBean {
                     }
                 }
             } catch (NoSuchFieldException e) {
-                ControllerBase.logger.info("field not found, name is " + key);
+                ControllerBase.logger.info("The bean class "
+                        + this.getClass().getName()
+                        + " cannot map the field name \"" + key + "\".");
             }
         }
     }
