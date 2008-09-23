@@ -10,6 +10,8 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -72,6 +74,13 @@ public abstract class ControllerBase {
     public BasicBean createBean() throws InstantiationException, 
             IllegalAccessException, ClassNotFoundException, InvocationTargetException {
         return getServlet().createBean(this, this.getActionMethod());
+    }
+    
+    public String getFormAction() {
+        String q = request.getQueryString();
+        return request.getContextPath() + request.getServletPath() 
+                + request.getPathInfo() 
+                + (StringUtils.isEmpty(q) ? "" : "?" + StringEscapeUtils.escapeHtml(q));
     }
     
     public void setRequest(HttpServletRequest request) {
