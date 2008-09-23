@@ -23,6 +23,8 @@ public abstract class ControllerBase {
     
     private String actionMethod = null;
     
+    private String urlHint = null;
+    
     public static String STD_ERROR_MSG_RESOURCE = "com/lvup/webnav/jmap/validator/errmessages";
     
     public static Log logger = LogFactory.getLog(ControllerBase.class);
@@ -31,7 +33,7 @@ public abstract class ControllerBase {
      * This method is for the "/" uri
      * @param hint
      */
-    public abstract void Index(String hint);
+    public abstract void Index();
 
     /**
      * this method will be called after the setServlet(), setRequest() and 
@@ -110,5 +112,13 @@ public abstract class ControllerBase {
 
     public void setLocale(Locale locale) {
         this.locale = locale;
+    }
+
+    public String getUrlHint() {
+        return urlHint;
+    }
+
+    public void setUrlHint(String urlHint) {
+        this.urlHint = urlHint;
     }
 }

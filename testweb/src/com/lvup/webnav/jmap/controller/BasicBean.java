@@ -38,7 +38,7 @@ public abstract class BasicBean {
     private List<String> errorMessage = null;
     
     private ControllerBase controller = null;
-
+    
     public boolean isFormValid() {
         return this.formValid;
     }

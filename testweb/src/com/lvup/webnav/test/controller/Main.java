@@ -30,12 +30,14 @@ public class Main extends ControllerBase {
             this.getRequest().setAttribute("p", p);
     }
 
-    public void Index(String hint) {
+    public void Index() {
         try {
             // supply the basic bean class and deal with the file upload or 
             // normally POST or GET data
             // when the bean data function end, put the bean into the request
             // or other scope object, then render the jsp
+            this.p.put("title", "Index page " + getRequest().getMethod() 
+                    + " UrlHint is " + this.getUrlHint() );
             this.render(INDEX_JSP);
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -48,12 +50,12 @@ public class Main extends ControllerBase {
      * @param httpMethod
      * @param hint
      */
-    public void IndexHtml(String hint) {
-        this.Index(hint);
+    public void IndexHtml() {
+        this.Index();
     }
     
     //@CreateBean(beanClassName="com.lvup.webnav.test.bean.main.Login", requestAttrName="MainLogin")
-    public void Login(String hint) {
+    public void Login() {
         try {
             // Login login = (Login) createBean();
             // this.getRequest().setAttribute("MainLogin", login);
@@ -61,7 +63,8 @@ public class Main extends ControllerBase {
             Login login = (Login) getRequest().getAttribute("MainLogin");
             
             this.p.put("pageContent", "/mains/login.jsp");
-            this.p.put("title", "Login " + getRequest().getMethod());
+            this.p.put("title", "Login " + getRequest().getMethod() 
+                    + " UrlHint is " + this.getUrlHint() );
             this.render(INDEX_JSP);
         } catch(Exception ex) {
             logger.error("", ex);
@@ -69,7 +72,7 @@ public class Main extends ControllerBase {
     }
     
     @CreateBean(createOnHttpMethod={"POST"})
-    public void Upload(String hint) {
+    public void Upload() {
         try {
             if("POST".equals(getRequest().getMethod())) {
                 Upload upload = (Upload) getRequest().getAttribute("MainUpLoad");
