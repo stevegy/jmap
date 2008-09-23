@@ -15,7 +15,7 @@ Look at this URI: */jmap/main/login/some-hint-like-a-id*
 If you leave the controller method `Login` without annotation, the default java bean class will been looking for in this rule:
 
  The default form bean class full name will be (package.prefixname.)bean.(servlet-path-name).(response-method-name). The `bean.` is a fixed name that will be added automatically.
- So, the last example URI: */jmap/main/login/some-hint-like-a-id* will be mapped to a java bean class name: (package.prefixname.)bean.main.Login.java. 
+ So, the last example URI: */jmap/main/login/some-hint-like-a-id* will be mapped to a java bean class name: (package.prefixname.)bean.main.Login.java. This bean should extends the BasicBean or FileUploadBean. These base class supply more default behave and helper method to support developers.
 
 You can add an annotation `@CreateBean` to the controller class method `Login` to control the form value bean creating rule. These annotation attributes are:
 
@@ -25,6 +25,10 @@ You can add an annotation `@CreateBean` to the controller class method `Login` t
  * `beanClassName`: default is an empty string "". This empty string means _"use the *default rule* to locate a java class"_. If this class defination cannot be found, a warning message will be logged, otherwise a java bean instance will be created and a serial of standard method call will be issued and these standard calls will set the form values to the bean's properties. In this case, the *_default rule_* means (package.prefixname.)bean.(servlet-path-name).(response-method-name) java class name.
 
  If you donot like this *_default rule_* name, you also can assign another one use these annotation attributes.
+
+ After the bean has been created, `initFormValues(ControllerBase)` method will be called by the servlet. The developer also can override this method and call `super.initFormValues ` let the base class map the form values and validating the fields.
+
+ Then, another bean class method will be called, `execute()`, the developer can override this method. In the time, the bean instance has been initialized and form values has been validated and set. You can sit and check these values do some database operation, retrive business data put them into List or Map in this inherited class instance. The servlet will put this instance into the HttpServletRequest attribute use the _*default name*_ or any other name you assigned in `@CreateBean(requestAttrName="some_name_you_like")`, so that jsp file can easily get them back like this `<c:foreach var="user" items="${MainLogin.usersList}">`.
 
 You may refer to the example page in the source package. There is a java bean to map the web request form values for `/main/login` page and bean's class is com.lvup.webnav.test.bean.main.Login. 
 
