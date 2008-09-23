@@ -28,8 +28,6 @@ public class JMapServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     
-    private static final Class[] webMethodArgs = {String.class};
-
     private String prefixPackageName = "";
     
     public static final String CONTROLLER_PACKAGE = "controller.";
@@ -261,7 +259,7 @@ public class JMapServlet extends HttpServlet {
             Class controllerClass = Class.forName(getPrefixPackageName() 
                     + CONTROLLER_PACKAGE + clz[0]);
 
-            Method m = controllerClass.getMethod(clz[1], webMethodArgs);
+            Method m = controllerClass.getMethod(clz[1]);
 
             Object oc = controllerClass.newInstance();
             ControllerBase controller = (ControllerBase) oc;
@@ -269,10 +267,11 @@ public class JMapServlet extends HttpServlet {
             controller.setRequest(request);
             controller.setResponse(response);
             controller.setActionMethod(clz[1]);
+            controller.setUrlHint(clz[2]);
             controller.init();
             createBean(m.getAnnotation(CreateBean.class), 
                     controller);
-            m.invoke(oc, clz[2]);
+            m.invoke(oc);
         } catch (ClassNotFoundException e) {
             // 404 response
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
