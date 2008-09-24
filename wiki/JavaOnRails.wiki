@@ -30,6 +30,10 @@ You can add an annotation `@CreateBean` to the controller class method `Login` t
 
  Then, another bean class method will be called, `execute()`, the developer can override this method. In the time, the bean instance has been initialized and form values has been validated and set. You can sit and check these values do some database operation, retrive business data put them into List or Map in this inherited class instance. The servlet will put this instance into the HttpServletRequest attribute use the _*default name*_ or any other name you assigned in `@CreateBean(requestAttrName="some_name_you_like")`, so that jsp file can easily get them back like this `<c:foreach var="user" items="${MainLogin.usersList}">`.
 
+ At last, the controller method `Login()` will be called by the servlet. So, before the controller method be called, the form data and business data had been prepared and ready to go. Your code just check the bean's status if some error occurred and make a `render` call to write out the response.
+
+ As you know, the Rails controller structure has a little problem: all uri mapping methods are defined in it, if you do not execute a strict developing specification, programmers may write all business code in the controller class so that class is too long to review. I suggest that you may write the business code out of the controller class, maybe the bean's `execute()` method is a good choice.
+
 You may refer to the example page in the source package. There is a java bean to map the web request form values for `/main/login` page and bean's class is com.lvup.webnav.test.bean.main.Login. 
 
 You can find the class `Login` is extends from `BasicBean`. The form bean should be extended from the `BasicBean` or `FileUploadBean`. Actually, the `FileUploadBean` extends the `BasicBean` and override the `initFormValues` method to handle the `multipart/form-data` form enctype. If your bean should accept the file upload form data, you should declare the bean to extend the `FileUploadBean`.
