@@ -1,4 +1,11 @@
 #labels Phase-Support
 = FAQ =
 
-TBC
+TODO
+
+which files should be _configed_
+ * web.xml
+ this is the java web container rule, we can not avoid this configuration, bala, bala ...
+
+ * jmap-config.properties
+ this config file just need only one line for the package prefix name
