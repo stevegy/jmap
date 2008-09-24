@@ -1,9 +1,9 @@
 #labels Phase-Support
 = FAQ =
 
-TODO
+==TODO==
 
-which files should be _configed_
+==which files should be _configed_==
  * web.xml
  this is the java web container rule, we can not avoid this configuration, bala, bala ...
 
