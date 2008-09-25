@@ -72,7 +72,7 @@ public class JMapServlet extends HttpServlet {
         PropertiesConfiguration config = new PropertiesConfiguration();
         config.load(getServletContext()
                 .getResourceAsStream("/WEB-INF/jmap-config.properties"));
-        setPrefixPackageName(config.getString("jmap.controller.package", "controller."));
+        setPrefixPackageName(config.getString("jmap.controller.package", ""));
         } catch (Exception e) {
             getLogger().error("", e);
         }
