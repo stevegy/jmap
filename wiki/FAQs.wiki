@@ -1,7 +1,7 @@
 #labels Phase-Support
 = FAQ =
 
-==Which files should be _configed_==
+==Which files should be _configed_ ?==
  * `/WEB-INF/web.xml`
  This is the java web container rule, we can not avoid this configuration for the servlet class and its url mapping. You may find the below text in the source code:
 {{{
