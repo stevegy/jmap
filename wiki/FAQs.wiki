@@ -1,11 +1,41 @@
 #labels Phase-Support
 = FAQ =
 
-==TODO==
+==Which files should be _configed_==
+ * `/WEB-INF/web.xml`
+ This is the java web container rule, we can not avoid this configuration for the servlet class and its url mapping. You may find the below text in the source code:
+{{{
+	<servlet>
+		<description>
+		</description>
+		<display-name>JMapServlet</display-name>
+		<servlet-name>JMapServlet</servlet-name>
+   		<init-param>
+			<param-name>CharacterEncoding</param-name> 
+			<param-value>UTF-8</param-value> 
+		</init-param>
+		<init-param>
+			<param-name>ContentType</param-name>
+			<param-value>text/html; charset=UTF-8</param-value>
+		</init-param>
+		<servlet-class>com.lvup.webnav.jmap.servlet.JMapServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>JMapServlet</servlet-name>
+		<url-pattern>/main/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>JMapServlet</servlet-name>
+		<url-pattern>/product/*</url-pattern>
+	</servlet-mapping>
+}}}
+ You may notice that `init-param`, these encoding relative parameters have default values `UTF-8` if you don't want to change them.
 
-==which files should be _configed_==
- * web.xml
- this is the java web container rule, we can not avoid this configuration, bala, bala ...
+ * `/WEB-INF/jmap-config.properties`
+ This configuration file is optional and if you want a package prefix name for the controllers and beans class. This file just need only one line for the package prefix name:
+ 
+ `jmap.controller.package = com.lvup.webnav.test.`
 
- * jmap-config.properties
- this config file just need only one line for the package prefix name ........
+ You may notice the last character is `"."` and this dot is required, otherwise the controller and bean will be "com.lvup.webnav.testController".
+
+ If you remove this file, all controller class package name will start with `controller.`, bean class package name will starts with `bean.`.
