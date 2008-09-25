@@ -41,4 +41,4 @@
  If you remove this file, all controller class package name will start with `controller.`, bean class package name will starts with `bean.`.
 
 == Does your framework support Ajax? ==
- I think the Ajax is *_NOTHING_* to do with server side except `Comet`. Yes, this is a business tricky word after these yesrs. Before the Gmail ground to this world, there is many ajax things. So, if you insist that ajax is a part of server side thing, let's give a example.
+ I think the Ajax is *_NOTHING_* to do with server side except `Comet`. Yes, this is a business tricky word after these yesrs. Before the Gmail ground to this world, there is many ajax things. So, if you insist that ajax is a part of server side thing, let's give an example.
