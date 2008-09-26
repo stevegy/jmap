@@ -44,6 +44,8 @@ import java.lang.annotation.Target;
 public @interface Required {
     boolean value() default true;
 
+    String validClass() default "com.lvup.webnav.jmap.validator.RequiredValidator";
+    
     String formatmsg() default "formatMsg";
 
     Message fieldName() default @Message("std.required");

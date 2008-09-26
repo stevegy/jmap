@@ -4,12 +4,16 @@
  */
 package com.lvup.webnav.jmap.controller;
 
+import com.lvup.webnav.jmap.validator.ErrorMessage;
 import com.lvup.webnav.jmap.validator.MaxLength;
 import com.lvup.webnav.jmap.validator.Message;
 import com.lvup.webnav.jmap.validator.MinLength;
 import com.lvup.webnav.jmap.validator.Required;
+import com.lvup.webnav.jmap.validator.RequiredValidator;
 import com.lvup.webnav.jmap.validator.RulePattern;
+import com.lvup.webnav.jmap.validator.Validator;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -132,7 +136,37 @@ public abstract class BasicBean {
     protected void validateField(Annotation a, String key, String[] value) 
             throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         if (a instanceof Required) {
-            validRequired((Required) a, key, value);
+            Required r = (Required) a;
+            Validator rv = null;
+            String vclass = r.validClass();
+            if(StringUtils.isNotEmpty(vclass)) {
+                try {
+                    Class rvc = Class.forName(vclass);
+                    Constructor rcons = rvc.getConstructor(Locale.class);
+                    rv = (Validator) rcons.newInstance(controller.getLocale());
+                } catch (NoSuchMethodException ex) {
+                    ControllerBase.logger.error("Cannot instance the required valid class.", ex);
+                    rv = new RequiredValidator(controller.getLocale());
+                } catch (SecurityException ex) {
+                    ControllerBase.logger.error("Cannot instance the required valid class.", ex);
+                    rv = new RequiredValidator(controller.getLocale());
+                } catch (InstantiationException ex) {
+                    ControllerBase.logger.error("Cannot instance the required valid class.", ex);
+                    rv = new RequiredValidator(controller.getLocale());
+                } catch (ClassNotFoundException ex) {
+                    ControllerBase.logger.error("Cannot find the required valid class.", ex);
+                    rv = new RequiredValidator(controller.getLocale());
+                }
+            }
+            
+            boolean valid = rv.validate(a, key, value);
+            if( ! valid ) {
+                this.invalidFormValue();
+                for(ErrorMessage em : rv.getErrorMessages()) {
+                    this.appendErrorMessage(em.getErrorMessage());
+                }
+            }
+            //validRequired((Required) a, key, value);
         }
         if (a instanceof MaxLength) {
             validMaxLength((MaxLength) a, key, value);
