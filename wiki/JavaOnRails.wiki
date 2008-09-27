@@ -40,4 +40,4 @@ You can find the class `Login` is extends from `BasicBean`. The form bean should
 
 Until now, I provide `@Required`, `@MaxLength`, `@MinLength`, `@RulePattern` field annotations to mark the form field validation rules. You can refer to the bean class `Login` in source code and take a look at the field `loginName` for example.
 
-You can find these annotations' defination in the package `com.lvup.webnav.jmap.validator`.
+You can find these annotations' defination in the package `com.lvup.webnav.jmap.validator`. And now, i'm checking the [http://www.javalid.org JaValid] to replace my own implement validators.
