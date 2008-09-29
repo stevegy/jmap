@@ -106,8 +106,8 @@ public abstract class BasicBean {
         this.controller = controller;
         
         Map param = this.controller.getRequest().getParameterMap();
-        validateFormMap(param);
         BeanUtils.populate(this, param);
+        validateFormMap(param);
     }
 
     protected Method getFormatMsgMethod(String formatMethod, Class annotationClass) {

@@ -122,8 +122,8 @@ public abstract class FileUploadBean extends BasicBean {
                 // ? encoding error ?
                 ControllerBase.logger.error("Request encoding error?", ex);
             }
-            this.validateFormMap(formValueMap);
             BeanUtils.populate(this, formValueMap);
+            this.validateFormMap(formValueMap);
         }
     }
 
