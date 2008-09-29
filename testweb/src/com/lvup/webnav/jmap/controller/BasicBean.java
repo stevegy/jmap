@@ -4,6 +4,7 @@
  */
 package com.lvup.webnav.jmap.controller;
 
+import com.lvup.webnav.jmap.javalid.ValidatorEntry;
 import com.lvup.webnav.jmap.validator.ErrorMessage;
 import com.lvup.webnav.jmap.validator.MaxLength;
 import com.lvup.webnav.jmap.validator.Message;
@@ -30,6 +31,8 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.javalid.core.AnnotationValidator;
+import org.javalid.core.ValidationMessage;
 
 /**
  *
@@ -107,7 +110,8 @@ public abstract class BasicBean {
         
         Map param = this.controller.getRequest().getParameterMap();
         BeanUtils.populate(this, param);
-        validateFormMap(param);
+        //validateFormMap(param);
+        validateFormMap();
     }
 
     protected Method getFormatMsgMethod(String formatMethod, Class annotationClass) {
@@ -379,6 +383,12 @@ public abstract class BasicBean {
                         + " cannot map the field name \"" + key + "\".");
             }
         }
+    }
+    
+    protected void validateFormMap() {
+        AnnotationValidator v = ValidatorEntry.getValidator();
+        List<ValidationMessage> messages = v.validateObject(this);
+        System.out.println(messages);
     }
 
 }

@@ -7,17 +7,22 @@ package com.lvup.webnav.test.bean.main;
 
 import com.lvup.webnav.jmap.controller.BasicBean;
 import com.lvup.webnav.jmap.controller.ControllerBase;
-import com.lvup.webnav.jmap.validator.MaxLength;
+//import com.lvup.webnav.jmap.validator.MaxLength;
 import com.lvup.webnav.jmap.validator.Required;
 import com.lvup.webnav.jmap.validator.Message;
 import com.lvup.webnav.jmap.validator.MinLength;
 import com.lvup.webnav.jmap.validator.RulePattern;
 import java.lang.reflect.InvocationTargetException;
+import org.javalid.annotations.core.JvGroup;
+import org.javalid.annotations.core.ValidateDefinition;
+import org.javalid.annotations.validation.MaxLength;
+import org.javalid.annotations.validation.NotEmpty;
 
 /**
  *
  * @author Steve Yao <steve.yao@lvup.com>
  */
+@ValidateDefinition
 public class Login extends BasicBean {
     
     /**
@@ -33,16 +38,19 @@ public class Login extends BasicBean {
     /**
      * example for use the message=@Message(value="std.required")
      */
-    @Required(fieldName=@Message(value="main.loginname", resource=RES_PATH))
+    /*@Required(fieldName=@Message(value="main.loginname", resource=RES_PATH))
     @MaxLength(value=20, fieldName=@Message(value="main.loginname", resource=RES_PATH))
     @MinLength(value=5, fieldName=@Message(value="main.loginname", resource=RES_PATH))
-    @RulePattern(value=EMAIL_PATTERN, fieldName=@Message(value="main.loginname", resource=RES_PATH))
+    @RulePattern(value=EMAIL_PATTERN, fieldName=@Message(value="main.loginname", resource=RES_PATH))*/
     private String loginName;
     
     private String passwd;
 
     private int[] chkTest;
     
+    @JvGroup
+    @NotEmpty
+    @MaxLength(length=5)
     public String getLoginName() {
         return loginName;
     }
