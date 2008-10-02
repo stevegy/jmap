@@ -3,7 +3,7 @@
  * 
  */
 
-package com.lvup.webnav.jmap.validator;
+package com.lvup.webnav.jmap.validator.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -40,14 +40,12 @@ import java.lang.annotation.Target;
  * @author Steve Yao <steve.yao@lvup.com>
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.METHOD})
 public @interface Required {
     boolean value() default true;
 
     String validClass() default "com.lvup.webnav.jmap.validator.RequiredValidator";
     
-    String formatmsg() default "formatMsg";
-
     Message fieldName() default @Message("std.required");
 
     Message message() default @Message("std.required");

@@ -3,7 +3,7 @@
  * 
  */
 
-package com.lvup.webnav.jmap.validator;
+package com.lvup.webnav.jmap.validator.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -11,19 +11,18 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.regex.Pattern;
 
-
 /**
  *
  * @author Steve Yao <steve.yao@lvup.com>
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD})
+@Target({ElementType.FIELD, ElementType.METHOD})
 public @interface RulePattern {
     String value() default "";
     
     int flag() default Pattern.CASE_INSENSITIVE;
     
-    String formatmsg() default "formatMsg";
+    String validClass() default "com.lvup.webnav.jmap.validator.RulePatternValidator";
 
     Message fieldName() default @Message("std.pattern");
 

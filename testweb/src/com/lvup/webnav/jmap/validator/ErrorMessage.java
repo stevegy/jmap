@@ -5,6 +5,13 @@
 
 package com.lvup.webnav.jmap.validator;
 
+import com.lvup.webnav.jmap.validator.annotation.Message;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  *
  * @author Steve Yao <steve.yao@lvup.com>
@@ -18,11 +25,45 @@ public class ErrorMessage {
     
     private String errorMessage = "";
     
-    public ErrorMessage(String key, String value, int index, String errorMessage) {
+    private Locale locale = Locale.getDefault();
+    
+    public static Log logger = LogFactory.getLog(ErrorMessage.class);
+    
+    public ErrorMessage(String key, String value, int index, Locale locale) {
         this.key = key;
         this.value = value;
         this.index = index;
-        this.errorMessage = errorMessage;
+        this.locale = locale;
+    }
+
+    public String getMessage(Message message) {
+        return getMessage(message.value(), message.resource());
+    }
+
+    public String getMessage(String msgId, String msgpath) {
+        String msg = "";
+        try {
+            ResourceBundle res = ResourceBundle.getBundle(msgpath, getLocale());
+            msg = res.getString(msgId);
+        } catch (MissingResourceException e) {
+            logger.warn("Cannot locate the resource. " +
+                    msgpath + "->" + msgId);
+        } catch (NullPointerException e) {
+            logger.error("NullPointerException for the message.", e);
+        }
+        return msg;
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        str.append("Key: " + this.key);
+        str.append("\r\nValue: " + this.value);
+        str.append("\r\nindex: " + this.index);
+        str.append("\r\nlocale: " + this.locale.toString());
+        str.append("\r\nMessage: " + this.errorMessage);
+        str.append("\r\n");
+        return str.toString();
     }
 
     public String getKey() {
@@ -55,5 +96,13 @@ public class ErrorMessage {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 }
