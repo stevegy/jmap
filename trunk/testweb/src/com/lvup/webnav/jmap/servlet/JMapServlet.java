@@ -102,19 +102,23 @@ public class JMapServlet extends HttpServlet {
         BasicBean bean = null;
         if (cb == null) {
             beanClassname = getBeanClassName(controller, controller.getActionMethod());
-            logger.debug("CreateBean is null, default bean class name is " 
+            if(logger.isDebugEnabled())
+                logger.debug("CreateBean is null, default bean class name is " 
                     + beanClassname);
             attrName = controllerClassName + controller.getActionMethod();
-            logger.debug("The bean Request attribute name is " + attrName);
+            if(logger.isDebugEnabled())
+                logger.debug("The bean Request attribute name is " + attrName);
         } else if (cb.create()) {
             httpm = cb.createOnHttpMethod();
             beanClassname = StringUtils.isEmpty(cb.beanClassName()) ? 
                 getBeanClassName(controller, controller.getActionMethod()) : cb.beanClassName();
             attrName = StringUtils.isEmpty(cb.requestAttrName()) ? 
                 controllerClassName + controller.getActionMethod() : cb.requestAttrName();
-            logger.debug("The CreateBean is true, bean class name is "
-                    + beanClassname);
-            logger.debug("The bean Request attribute name is " + attrName);
+            if(logger.isDebugEnabled()) {
+                logger.debug("The CreateBean is true, bean class name is "
+                        + beanClassname);
+                logger.debug("The bean Request attribute name is " + attrName);
+            }
         }
         try {
             boolean createOnHttpMethod = false;
@@ -126,7 +130,8 @@ public class JMapServlet extends HttpServlet {
                     break;
                 }
             }
-            logger.debug("the createOnHttpMethod is " + Arrays.toString(httpm)
+            if(logger.isDebugEnabled())
+                logger.debug("the createOnHttpMethod is " + Arrays.toString(httpm)
                     + ". The current HTTP method is " + httpMethod + ".");
             if (StringUtils.isNotEmpty(beanClassname) && createOnHttpMethod) {
                 bean = createBean(controller, beanClassname);

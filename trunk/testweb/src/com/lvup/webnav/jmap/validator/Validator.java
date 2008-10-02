@@ -13,14 +13,11 @@ import java.util.Locale;
  *
  * @author Steve Yao <steve.yao@lvup.com>
  */
-public interface Validator {
-    public boolean validate(Annotation a, String key, String[] value);
+public interface Validator <T extends Annotation>{
+    public List<ErrorMessage> validate(T a, String key, String[] value, Locale locale);
     
-    public String formatMessage(Annotation a, String key, String[] value, int index);
-    
-    public List<ErrorMessage> getErrorMessages();
-    
-    public Locale getLocale();
-    
-    public void setLocale(Locale locale);
+    public ErrorMessage validate(T a, String key, String value, int index, Locale locale);
+
+    public String formatMessage(T a, ErrorMessage errorMessage);
+
 }

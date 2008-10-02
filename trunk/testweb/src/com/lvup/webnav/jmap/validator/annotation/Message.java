@@ -3,7 +3,7 @@
  * 
  */
 
-package com.lvup.webnav.jmap.validator;
+package com.lvup.webnav.jmap.validator.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

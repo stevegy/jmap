@@ -5,8 +5,9 @@
 
 package com.lvup.webnav.jmap.validator;
 
-import java.lang.annotation.Annotation;
+import com.lvup.webnav.jmap.validator.annotation.Required;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import org.apache.commons.lang.StringUtils;
 
@@ -14,43 +15,55 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Steve Yao <steve.yao@lvup.com>
  */
-public class RequiredValidator extends ValidatorBase {
+public class RequiredValidator implements Validator<Required> {
 
-    public RequiredValidator(Locale locale) {
-        this.locale = locale;
+    public RequiredValidator() {
+        
     }
     
-    public boolean validate(Annotation a, String key, String[] value) {
-        Required required = (Required) a;
+    public List<ErrorMessage> validate(Required a, 
+            String key, String[] value, Locale locale) {
         int index = 0;
-        boolean ret = true;
-        if (required.value()) {
+        ArrayList<ErrorMessage> errorMessages = null;
+        if (a.value()) {
             for (String v : value) {
-                if (StringUtils.isEmpty(v)) {
-                    ErrorMessage emsg = new ErrorMessage(key, value[index], 
-                            index, formatMessage(required, key, value, index));
-                    if(this.errorMessages == null) {
-                        this.errorMessages = new ArrayList<ErrorMessage>();
+                ErrorMessage emsg = validate(a, key, v, index, locale);
+                if(emsg != null) {
+                    emsg.setErrorMessage(formatMessage(a, emsg));
+                    if(errorMessages == null) {
+                        errorMessages = new ArrayList<ErrorMessage>();
                     }
-                    this.errorMessages.add(emsg);
-                    ret = false;
+                    errorMessages.add(emsg);
                 }
                 index ++;
             }
         }
-        return ret;
+        return errorMessages;
     }
 
-    public String formatMessage(Annotation a, String key, String[] value, int index) {
-        Required required = (Required) a;
-        String msg = getMessage(required.message());
+    public String formatMessage(Required a, ErrorMessage errorMessage) {
+        String msg = errorMessage.getMessage(a.message());
         if (StringUtils.isNotEmpty(msg)) {
             if (msg.indexOf("%s") > -1) {
                 String emsg = String.format(msg, 
-                        getMessage(required.fieldName()));
+                        errorMessage.getMessage(a.fieldName()));
                 msg = emsg;
             }
         }
         return msg;
     }
+
+    public ErrorMessage validate(Required a, String key, String value, int index, 
+            Locale locale) {
+        ErrorMessage errorMessage = null;
+        if (a.value()) {
+            if (StringUtils.isEmpty(value)) {
+                errorMessage = new ErrorMessage(key, value, 
+                        index, locale);
+                errorMessage.setErrorMessage(formatMessage(a, errorMessage));
+            }
+        }
+        return errorMessage;
+    }
+
 }
