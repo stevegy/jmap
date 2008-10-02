@@ -39,7 +39,7 @@ public class RulePatternValidator implements Validator<RulePattern>{
         ErrorMessage msg = null;
         if( StringUtils.isEmpty(a.value()) || value == null)   return msg;
         Pattern p = Pattern.compile(a.value());
-        if(p.matcher(value).matches()) {
+        if(! p.matcher(value).matches()) {
             msg = new ErrorMessage(key, value, index, locale);
             msg.setErrorMessage(formatMessage(a, msg));
         }

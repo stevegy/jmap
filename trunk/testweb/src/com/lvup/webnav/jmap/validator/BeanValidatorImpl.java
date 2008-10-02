@@ -6,7 +6,9 @@
 package com.lvup.webnav.jmap.validator;
 
 import com.lvup.webnav.jmap.validator.annotation.MaxLength;
+import com.lvup.webnav.jmap.validator.annotation.MinLength;
 import com.lvup.webnav.jmap.validator.annotation.Required;
+import com.lvup.webnav.jmap.validator.annotation.RulePattern;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -51,6 +53,12 @@ public class BeanValidatorImpl implements BeanValidator{
         } else if(a instanceof MaxLength) {
             MaxLength m = (MaxLength) a;
             vclass = m.validClass();
+        } else if(a instanceof MinLength) {
+            MinLength m = (MinLength) a;
+            vclass = m.validClass();
+        } else if(a instanceof RulePattern) {
+            RulePattern r = (RulePattern) a;
+            vclass = r.validClass();
         }
         return vclass;
     }
