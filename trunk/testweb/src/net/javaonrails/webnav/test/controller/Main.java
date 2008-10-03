@@ -91,5 +91,24 @@ public class Main extends ControllerBase {
             logger.error("", e);
         }
     }
+    
+    @SuppressWarnings("unchecked")
+    public void Dynalist() {
+        try {
+            p.put("pageContent", "/mains/ajax-dynalist.jsp");
+            p.put("title", "Upload file test");
+            this.render(INDEX_JSP);
+        } catch(Exception e) {
+            logger.error("", e);
+        }
+    }
+    
+    public void UpdateList() {
+        try {
+            this.render("/mains/selectlist.jsp");
+        } catch(Exception e) {
+            logger.error("", e);
+        }
+    }
 
 }
