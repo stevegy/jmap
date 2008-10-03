@@ -23,6 +23,7 @@ public class Main extends ControllerBase {
      * had been instanced and set the request, response and servlet object.
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void init() {
             this.p = new HashMap();
             p.put("title", "Title from Index");
@@ -30,6 +31,7 @@ public class Main extends ControllerBase {
             this.getRequest().setAttribute("p", p);
     }
 
+    @SuppressWarnings("unchecked")
     public void Index() {
         try {
             // supply the basic bean class and deal with the file upload or 
@@ -55,6 +57,7 @@ public class Main extends ControllerBase {
     }
     
     //@CreateBean(beanClassName="com.lvup.webnav.test.bean.main.Login", requestAttrName="MainLogin")
+    @SuppressWarnings("unchecked")
     public void Login() {
         try {
             // Login login = (Login) createBean();
@@ -72,6 +75,7 @@ public class Main extends ControllerBase {
     }
     
     @CreateBean(createOnHttpMethod={"POST"})
+    @SuppressWarnings("unchecked")
     public void Upload() {
         try {
             if("POST".equals(getRequest().getMethod())) {
