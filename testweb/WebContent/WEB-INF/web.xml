@@ -14,7 +14,7 @@
 			<param-name>ContentType</param-name>
 			<param-value>text/html; charset=UTF-8</param-value>
 		</init-param>
-		<servlet-class>com.lvup.webnav.jmap.servlet.JMapServlet</servlet-class>
+		<servlet-class>net.javaonrails.webnav.jmap.servlet.JMapServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>JMapServlet</servlet-name>
