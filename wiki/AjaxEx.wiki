@@ -51,7 +51,7 @@ Add these code to the `controller.Main` class:
         }
     }
 }}}
-This method will response to the uri `/jmap/main/update-list` and by the protytype of bean name and request attribute key name, the java bean class `bean.UpdateList` will be mapped to and the request attribute name `MainUpdateList` will be added. 
+This method will response to the uri `/jmap/main/update-list` and by the protocol of bean name and request attribute key name, the java bean class `bean.UpdateList` will be mapped to and the request attribute name `MainUpdateList` will be added. 
 
 You may notice this line `this.render("/mains/selectlist.jsp");`, this will output a jsp response to the client browser.
 
