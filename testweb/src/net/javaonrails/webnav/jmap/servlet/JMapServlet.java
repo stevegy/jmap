@@ -283,7 +283,7 @@ public class JMapServlet extends HttpServlet {
         } catch (ClassNotFoundException e) {
             // 404 response
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            getLogger().error("Cannot find the class.", e);
+            getLogger().warn("Cannot find the class.", e);
         } catch (InstantiationException e) {
             // 501 error
             response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
@@ -299,7 +299,7 @@ public class JMapServlet extends HttpServlet {
         } catch (NoSuchMethodException e) {
             // 404
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            getLogger().error("Action class method not found.", e);
+            getLogger().warn("Action class method not found.", e);
         } catch (IllegalArgumentException e) {
             // 404
             response.sendError(HttpServletResponse.SC_NOT_FOUND);

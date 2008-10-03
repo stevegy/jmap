@@ -7,6 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="shortcut icon" href="${pageContext.request.contextPath}/static/images/favicon.ico" type="image/x-icon" />
 <title><c:out value="${p['title']}" /></title>
+<script type="text/javascript" src="${pageContext.request.contextPath}/static/js/prototype-1.6.0.3.js"></script>
 </head>
 <body>
 <div>
