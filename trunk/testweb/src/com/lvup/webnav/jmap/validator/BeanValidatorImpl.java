@@ -84,6 +84,7 @@ public class BeanValidatorImpl implements BeanValidator{
         return msg;
     }
 
+    @SuppressWarnings("unchecked")
     private List<ErrorMessage> validMessage(Field field, Object bean, 
             Validator rv, Annotation a, Locale locale, List<ErrorMessage> msg) {
         try {

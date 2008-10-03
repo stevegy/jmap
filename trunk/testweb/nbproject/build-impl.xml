@@ -522,13 +522,9 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy-ear-war file="${file.reference.log4j-1.2.15.jar}" propname="included.lib.file.reference.log4j-1.2.15.jar.X"/>
         <basename file="${file.reference.commons-fileupload-1.2.1.jar}" property="included.lib.file.reference.commons-fileupload-1.2.1.jar"/>
         <copy-ear-war file="${file.reference.commons-fileupload-1.2.1.jar}" propname="included.lib.file.reference.commons-fileupload-1.2.1.jar.X"/>
-        <basename file="${file.reference.javalid-core-1.1.jar}" property="included.lib.file.reference.javalid-core-1.1.jar"/>
-        <copy-ear-war file="${file.reference.javalid-core-1.1.jar}" propname="included.lib.file.reference.javalid-core-1.1.jar.X"/>
-        <basename file="${file.reference.juel-2.1.0-impl.jar}" property="included.lib.file.reference.juel-2.1.0-impl.jar"/>
-        <copy-ear-war file="${file.reference.juel-2.1.0-impl.jar}" propname="included.lib.file.reference.juel-2.1.0-impl.jar.X"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.file.reference.commons-beanutils-1.8.0.jar} ${included.lib.file.reference.commons-configuration-1.5.jar} ${included.lib.file.reference.standard.jar} ${included.lib.file.reference.commons-io-1.4.jar} ${included.lib.file.reference.commons-lang-2.4.jar} ${included.lib.file.reference.jstl.jar} ${included.lib.file.reference.commons-logging-1.1.1.jar} ${included.lib.file.reference.log4j-1.2.15.jar} ${included.lib.file.reference.commons-fileupload-1.2.1.jar} ${included.lib.file.reference.javalid-core-1.1.jar} ${included.lib.file.reference.juel-2.1.0-impl.jar} "/>
+            <attribute name="Class-Path" value="${included.lib.file.reference.commons-beanutils-1.8.0.jar} ${included.lib.file.reference.commons-configuration-1.5.jar} ${included.lib.file.reference.standard.jar} ${included.lib.file.reference.commons-io-1.4.jar} ${included.lib.file.reference.commons-lang-2.4.jar} ${included.lib.file.reference.jstl.jar} ${included.lib.file.reference.commons-logging-1.1.1.jar} ${included.lib.file.reference.log4j-1.2.15.jar} ${included.lib.file.reference.commons-fileupload-1.2.1.jar} "/>
         </manifest>
         <delete dir="${dist.ear.dir}/temp"/>
     </target>
@@ -542,8 +538,6 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy file="${file.reference.commons-logging-1.1.1.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.log4j-1.2.15.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${file.reference.commons-fileupload-1.2.1.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.javalid-core-1.1.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${file.reference.juel-2.1.0-impl.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" name="do-ear-dist">
         <dirname file="${dist.ear.war}" property="dist.jar.dir"/>

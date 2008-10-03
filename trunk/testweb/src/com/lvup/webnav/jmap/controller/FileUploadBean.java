@@ -55,6 +55,7 @@ public abstract class FileUploadBean extends BasicBean {
      * @throws java.lang.reflect.InvocationTargetException
      */
     @Override 
+    @SuppressWarnings("unchecked")
     public void initFormValues(ControllerBase controller) 
             throws IllegalAccessException, InvocationTargetException {
         
@@ -75,14 +76,16 @@ public abstract class FileUploadBean extends BasicBean {
                 items = upload.parseRequest(controller.getRequest());
             } catch (FileSizeLimitExceededException e) {
                 fileSizeOver = true;
-                ControllerBase.logger.warn("File size limit exceeds, the limit is "
-                        + getFileSizeLimit() + " bytes.", e);
+                logger.warn("File size limit exceeds, the limit is "
+                        + getFileSizeLimit() + " bytes. Actual size is " 
+                        + e.getActualSize() + " bytes.");
             } catch (SizeLimitExceededException e) {
                 fileSizeOver = true;
-                ControllerBase.logger.warn("Request size over the size limit " 
-                        + getRequestSizeLimit()  + " bytes.", e);
+                logger.warn("Request size over the size limit " 
+                        + getRequestSizeLimit()  + " bytes. Actual size is " 
+                        + e.getActualSize() + " bytes.");
             } catch (FileUploadException e) {
-                ControllerBase.logger.error("File upload exception.", e);
+                logger.error("File upload exception.", e);
             }
             try {
                 String key = null;
@@ -120,7 +123,7 @@ public abstract class FileUploadBean extends BasicBean {
                 }
             } catch (UnsupportedEncodingException ex) {
                 // ? encoding error ?
-                ControllerBase.logger.error("Request encoding error?", ex);
+                logger.error("Request encoding error?", ex);
             }
             BeanUtils.populate(this, formValueMap);
             this.validateFormMap(formValueMap);

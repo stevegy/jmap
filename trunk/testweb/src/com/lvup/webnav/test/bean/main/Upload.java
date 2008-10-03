@@ -7,7 +7,6 @@ package com.lvup.webnav.test.bean.main;
 
 import com.lvup.webnav.jmap.controller.ControllerBase;
 import com.lvup.webnav.jmap.controller.FileUploadBean;
-import com.lvup.webnav.jmap.validator.ErrorMessage;
 import java.lang.reflect.InvocationTargetException;
 import org.apache.commons.fileupload.FileItem;
 
@@ -29,12 +28,10 @@ public class Upload extends FileUploadBean{
         
         if(this.isFileSizeOver()) {
             // file size or request limit exceeds! The form values are all lost!
-            ErrorMessage msg = new ErrorMessage("", "", 0, controller.getLocale());
-            msg.setErrorMessage(String.format( 
+            this.appendErrorMessage(String.format( 
                     this.getMessage("std.filesizelimit", 
                         ControllerBase.STD_ERROR_MSG_RESOURCE), 
                     this.getFileSizeLimit()));
-            this.appendErrorMessage(msg);
         }
     }
     

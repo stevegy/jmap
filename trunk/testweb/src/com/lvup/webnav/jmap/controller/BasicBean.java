@@ -4,7 +4,6 @@
  */
 package com.lvup.webnav.jmap.controller;
 
-import com.lvup.webnav.jmap.javalid.ValidatorEntry;
 import com.lvup.webnav.jmap.validator.BeanValidator;
 import com.lvup.webnav.jmap.validator.BeanValidatorImpl;
 import com.lvup.webnav.jmap.validator.ErrorMessage;
@@ -27,8 +26,6 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.javalid.core.AnnotationValidator;
-import org.javalid.core.ValidationMessage;
 
 /**
  *
@@ -101,6 +98,7 @@ public abstract class BasicBean {
      * @throws java.lang.IllegalAccessException
      * @throws java.lang.reflect.InvocationTargetException
      */
+    @SuppressWarnings("unchecked")
     public void initFormValues(ControllerBase controller) 
             throws IllegalAccessException, InvocationTargetException {
         
@@ -109,7 +107,6 @@ public abstract class BasicBean {
         Map param = this.controller.getRequest().getParameterMap();
         BeanUtils.populate(this, param);
         validateFormMap(param);
-        // validateFormMap();
     }
 
     public ResourceBundle getResource(String resource, Locale locale) {
@@ -125,6 +122,14 @@ public abstract class BasicBean {
             this.errorMessage = new ArrayList<ErrorMessage>();
         }
         this.errorMessage.add(msg);
+    }
+    
+    public void appendErrorMessage(String msg) {
+        ErrorMessage emsg = new ErrorMessage("", "", 0, getController().getLocale());
+        emsg.setErrorMessage(msg);
+        if(errorMessage == null)
+            errorMessage = new ArrayList<ErrorMessage>();
+        this.errorMessage.add(emsg);
     }
     
     public String getFormattedErrorMessage() {
@@ -153,9 +158,19 @@ public abstract class BasicBean {
         this.controller = controller;
     }
     
-    protected static BeanValidator beanValidator = new BeanValidatorImpl();
+    protected static BeanValidator beanValidator = null;
+    
+    public BeanValidator getBeanValidator() {
+        if(beanValidator == null)
+            beanValidator = new BeanValidatorImpl();
+        return beanValidator;
+    }
 
-    protected void validateFormMap(Map param) throws InvocationTargetException, SecurityException, IllegalArgumentException, IllegalAccessException {
+    @SuppressWarnings("unchecked")
+    protected void validateFormMap(Map param) 
+            throws InvocationTargetException, 
+            SecurityException, 
+            IllegalArgumentException, IllegalAccessException {
         Iterator it = param.keySet().iterator();
         while (it.hasNext()) {
             String key = (String) it.next();
@@ -167,7 +182,7 @@ public abstract class BasicBean {
                     // validate
                     Annotation[] fas = field.getAnnotations();
                     for (Annotation a : fas) {
-                        validClass = beanValidator.validClassName(a);
+                        validClass = getBeanValidator().validClassName(a);
                         if(StringUtils.isEmpty(validClass)) 
                             continue;
                         Class vclass = Class.forName(validClass);
@@ -176,6 +191,7 @@ public abstract class BasicBean {
                                 v.validate(a, key, value, 
                                 getController().getLocale());
                         if(msgs != null) {
+                            this.invalidFormValue();
                             if(this.errorMessage == null) {
                                 this.errorMessage = new ArrayList<ErrorMessage>();
                             }
@@ -195,10 +211,4 @@ public abstract class BasicBean {
         }
     }
     
-    protected void validateFormMap() {
-        AnnotationValidator v = ValidatorEntry.getValidator();
-        List<ValidationMessage> messages = v.validateObject(this);
-        System.out.println(messages);
-    }
-
 }

@@ -74,7 +74,9 @@ public class JMapServlet extends HttpServlet {
                 .getResourceAsStream("/WEB-INF/jmap-config.properties"));
         setPrefixPackageName(config.getString("jmap.controller.package", ""));
         } catch (Exception e) {
-            getLogger().error("", e);
+            getLogger().info("/WEB-INF/jmap-config.properties is not required\r\n"
+                    + "But if you define a key: jmap.controller.package in it "
+                    + "will be better to orgernize the packages.", e);
         }
     }
     
@@ -250,6 +252,7 @@ public class JMapServlet extends HttpServlet {
      * @throws IllegalAccessException
      * @throws InstantiationExceptiond
      */
+    @SuppressWarnings("unchecked")
     protected void processRequest(HttpServletRequest request,
             HttpServletResponse response)
             throws ServletException, IOException {
@@ -280,11 +283,11 @@ public class JMapServlet extends HttpServlet {
         } catch (ClassNotFoundException e) {
             // 404 response
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            getLogger().error("", e);
+            getLogger().error("Cannot find the class.", e);
         } catch (InstantiationException e) {
             // 501 error
             response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
-            getLogger().error("", e);
+            getLogger().error("Cannot instance the class.", e);
         } catch (IllegalAccessException e) {
             // also 501
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
@@ -296,7 +299,7 @@ public class JMapServlet extends HttpServlet {
         } catch (NoSuchMethodException e) {
             // 404
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            getLogger().error("", e);
+            getLogger().error("Action class method not found.", e);
         } catch (IllegalArgumentException e) {
             // 404
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
