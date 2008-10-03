@@ -1,6 +1,6 @@
 = Introduction =
 
-*Yes, actually, every web application support Ajax.*
+*Yes, actually, every web application support Ajax, whatever its platform and languages.*
 
 
 = Details =
