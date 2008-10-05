@@ -16,6 +16,19 @@ import org.apache.commons.lang.StringUtils;
  * @author steve
  */
 public class MinLengthValidator implements Validator<MinLength>{
+    
+    private static MinLengthValidator minLength = null;
+    
+    private MinLengthValidator() {
+        
+    }
+    
+    public static MinLengthValidator newInstance() {
+        if(minLength == null) {
+            minLength = new MinLengthValidator();
+        }
+        return minLength;
+    }
 
     public List<ErrorMessage> validate(MinLength a, String key, String[] value, Locale locale) {
         ArrayList<ErrorMessage> msgs = null;

@@ -12,7 +12,6 @@ import net.javaonrails.webnav.jmap.validator.annotation.RulePattern;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -41,7 +40,7 @@ public class BeanValidatorImpl implements BeanValidator{
             Annotation[] annotations = field.getAnnotations();
             msg = validAnnotations(annotations, field, bean, locale, msg);
         }
-        Method[] methods = bean.getClass().getMethods();
+        // Method[] methods = bean.getClass().getMethods();
         return msg;
     }
 

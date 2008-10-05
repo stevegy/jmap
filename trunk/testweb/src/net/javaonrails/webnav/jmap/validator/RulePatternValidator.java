@@ -17,6 +17,19 @@ import org.apache.commons.lang.StringUtils;
  * @author steve
  */
 public class RulePatternValidator implements Validator<RulePattern>{
+    
+    private static RulePatternValidator rulePattern = null;
+    
+    private RulePatternValidator() {
+        
+    }
+    
+    public static RulePatternValidator newInstance() {
+        if(rulePattern == null) {
+            rulePattern = new RulePatternValidator();
+        }
+        return rulePattern;
+    }
 
     public List<ErrorMessage> validate(RulePattern a, String key, String[] value, Locale locale) {
         ArrayList<ErrorMessage> msgs = null;

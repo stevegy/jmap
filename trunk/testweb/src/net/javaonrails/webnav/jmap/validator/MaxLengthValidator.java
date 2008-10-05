@@ -16,6 +16,19 @@ import org.apache.commons.lang.StringUtils;
  * @author steve
  */
 public class MaxLengthValidator implements Validator<MaxLength> {
+    
+    private static MaxLengthValidator maxLength = null;
+    
+    public static MaxLengthValidator newInstance() {
+        if(maxLength == null) {
+            maxLength = new MaxLengthValidator();
+        }
+        return maxLength;
+    }
+    
+    private MaxLengthValidator() {
+        
+    }
 
     public List<ErrorMessage> validate(MaxLength a, String key, String[] value, 
             Locale locale) {
