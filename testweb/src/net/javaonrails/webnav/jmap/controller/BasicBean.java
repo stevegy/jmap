@@ -12,6 +12,7 @@ import net.javaonrails.webnav.jmap.validator.annotation.Message;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -186,7 +187,9 @@ public abstract class BasicBean {
                         if(StringUtils.isEmpty(validClass)) 
                             continue;
                         Class vclass = Class.forName(validClass);
-                        Validator v = (Validator) vclass.newInstance();
+                        //Validator v = (Validator) vclass.newInstance();
+                        Method m = vclass.getMethod("newInstance");
+                        Validator v = (Validator) m.invoke(null);
                         List<ErrorMessage> msgs = 
                                 v.validate(a, key, value, 
                                 getController().getLocale());
@@ -199,8 +202,8 @@ public abstract class BasicBean {
                         }
                     }
                 }
-            } catch (InstantiationException e) {
-                logger.error("Cannot instance the class " + validClass, e);
+            } catch (NoSuchMethodException e) {
+                logger.error("Cannot find the " + validClass + ".newInstance()", e);
             } catch(ClassNotFoundException e) {
                 logger.error("Cannot find the class " + validClass, e);
             } catch (NoSuchFieldException e) {

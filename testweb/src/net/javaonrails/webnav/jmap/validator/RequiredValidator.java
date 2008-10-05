@@ -17,7 +17,16 @@ import org.apache.commons.lang.StringUtils;
  */
 public class RequiredValidator implements Validator<Required> {
 
-    public RequiredValidator() {
+    static private RequiredValidator required = null;
+    
+    static public RequiredValidator newInstance() {
+        if(required == null) {
+            required = new RequiredValidator();
+        }
+        return required;
+    }
+    
+    private RequiredValidator() {
         
     }
     

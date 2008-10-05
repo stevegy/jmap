@@ -27,5 +27,4 @@ public interface Validator <T extends Annotation>{
     public ErrorMessage validate(T a, String key, String value, int index, Locale locale);
 
     public String formatMessage(T a, ErrorMessage errorMessage);
-
 }
