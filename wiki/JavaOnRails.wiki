@@ -7,7 +7,7 @@ Look at this URI: */jmap/main/login/some-hint-like-a-id*
 
  * */jmap* is the Java Web Context path for the web application. This context path will be mapped to the web server. This name may be changed by the web application deployer and can be any name. So, it cannot be a class name mapping rule to use.
  * */main* is the servlet map path and defined as pattern `"/main/*"` in web.xml. This name `main` will be translated as package.prefixname.Main java class. 
- This controller class should be extends from the `com.lvup.webnav.jmap.controller.ControllerBase`. The `ControllerBase` provide many basic methods to connect the servlet context with controller. And the `ControllerBase` also provide a jsp file render method. You may refer to the source code of this class, or, you can refer to the example code `com.lvup.webnav.jmap.test.controller.Main.java`.
+ This controller class should be extends from the `net.javaonrails.webnav.jmap.controller.ControllerBase`. The `ControllerBase` provide many basic methods to connect the servlet context with controller. And the `ControllerBase` also provide a jsp file render method. You may refer to the source code of this class, or, you can refer to the example code `net.javaonrails.webnav.jmap.test.controller.Main.java`.
  * and after the /main/ is all in path_info, but the first word */login* will be mapped to the method: 
  `public void Login()` in the `Main` class. A String 'some-hint-like-a-id' will be passed to the controller field `urlHint`. You can use `getUrlHint()` to get it.
 
@@ -34,10 +34,10 @@ You can add an annotation `@CreateBean` to the controller class method `Login` t
 
  As you know, the Rails controller structure has a little problem: all uri mapping methods are defined in it, if you do not execute a strict developing specification, programmers may write all business code in the controller class so that class is too long to review. I suggest that you may write the business code out of the controller class, maybe the bean's `execute()` method is a good choice.
 
-You may refer to the example page in the source package. There is a java bean to map the web request form values for `/main/login` page and bean's class is com.lvup.webnav.test.bean.main.Login. 
+You may refer to the example page in the source package. There is a java bean to map the web request form values for `/main/login` page and bean's class is net.javaonrails.webnav.test.bean.main.Login. 
 
 You can find the class `Login` is extends from `BasicBean`. The form bean should be extended from the `BasicBean` or `FileUploadBean`. Actually, the `FileUploadBean` extends the `BasicBean` and override the `initFormValues` method to handle the `multipart/form-data` form enctype. If your bean should accept the file upload form data, you should declare the bean to extend the `FileUploadBean`.
 
 Until now, I provide `@Required`, `@MaxLength`, `@MinLength`, `@RulePattern` field annotations to mark the form field validation rules. You can refer to the bean class `Login` in source code and take a look at the field `loginName` for example.
 
-You can find these annotations' defination in the package `com.lvup.webnav.jmap.validator`. And now, i'm checking the [http://www.javalid.org JaValid] to replace my own implement validators.
+You can find these annotations' defination in the package `net.javaonrails.webnav.jmap.validator`. And now, i'm checking the [http://www.javalid.org JaValid] to replace my own implement validators.
