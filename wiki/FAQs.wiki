@@ -18,7 +18,7 @@
 			<param-name>ContentType</param-name>
 			<param-value>text/html; charset=UTF-8</param-value>
 		</init-param>
-		<servlet-class>com.lvup.webnav.jmap.servlet.JMapServlet</servlet-class>
+		<servlet-class>net.javaonrails.webnav.jmap.servlet.JMapServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>JMapServlet</servlet-name>
@@ -34,9 +34,9 @@
  * `/WEB-INF/jmap-config.properties`
  This configuration file is optional and if you want a package prefix name for the controllers and beans class. This file just need only one line for the package prefix name:
  
- `jmap.controller.package = com.lvup.webnav.test.`
+ `jmap.controller.package = net.javaonrails.webnav.test.`
 
- You may notice the last character is `"."` and this dot is required, otherwise the controller and bean will be "com.lvup.webnav.testController".
+ You may notice the last character is `"."` and this dot is required, otherwise the controller and bean will be "net.javaonrails.webnav.testController".
 
  If you remove this file, all controller class package name will start with `controller.`, bean class package name will starts with `bean.`.
 
