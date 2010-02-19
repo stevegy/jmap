@@ -53,7 +53,7 @@
 
  Actually, in this way, they think that the web server just equals a database server, the HTTP is the protocol and the js libraries or Flex is a client side programming tools just like VB6 or Delphi did. The VB6 is running on top of the OS, but now, these things running in a client web browser. Even they have to face the same problem like the different OS and different browser behaves.
 
- What happen? Yes, we are going back to the old age. We are inventing the new version of VB6 or the other kind of Delphi and let them running on an OS named WEB Browser. Replace the database with a combining web server and a _real_ database server, replace the database client library communicating protocol with http. Hum..., by the way, I like the old fashion. Actually, before I dived into the web developing, I'm a C++ and VB6 programmer.
+ What happen? Yes, we are going back to the old age. We are inventing the new version of VB6 or the other kind of Delphi and let them running on an OS named WEB Browser. Replace the database with a combining web server and a _real_ database server, replace the database client library communicating protocol with http. Hum..., by the way, I like the old fashion. Actually, before I dived into the web developing, I was a C++ and VB6 programmer.
  
  * *Two*. The web server supply a piece of HTML, the client javascript use DOM functions to update an area on the page. Many javascript libraries support this way, prototype, YUI and many others. So, in this way, programming language is not a matter, like asp(vbscript), php, python can support.
 
