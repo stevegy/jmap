@@ -1,5 +1,5 @@
 /*
- * Copyright all rights reserved by LVUP Shanghai.
+ * 
  * 
  */
 

@@ -1,5 +1,5 @@
 /*
- * Copyright all rights reserved by LVUP Shanghai.
+ * 
  * 
  */
 
@@ -14,7 +14,7 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  *
- * @author Steve Yao <steve.yao@lvup.com>
+ * @author Steve Yao 
  */
 public class ErrorMessage {
     private String key = "";
