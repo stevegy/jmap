@@ -77,10 +77,25 @@ public abstract class ControllerBase {
     }
     
     public String getFormAction() {
-        String q = request.getQueryString();
-        return request.getContextPath() + request.getServletPath() 
-                + request.getPathInfo() 
+        Object q = request.getAttribute("javax.servlet.forward.query_string");
+        // Change from the tomcat 6.0.20?
+        // After the dispatch to a jsp file, the request.getServletPath() will
+        // return the jsp file path instead of servlet path. I am not clear
+        // this is a bug or not.
+
+        /*return this.getRequest().getContextPath() + this.getRequest().getServletPath()
+                + this.getRequest().getPathInfo()
                 + (StringUtils.isEmpty(q) ? "" : "?" + StringEscapeUtils.escapeHtml(q));
+         *
+         */
+        // refer to the Servlet spec. 2.4 - 8.4.2, these attributes should remain
+        // the original request even under the situation that multiplue forwards and
+        // subsequent includes are called.
+        Object pathInfo = request.getAttribute("javax.servlet.forward.path_info");
+        return request.getAttribute("javax.servlet.forward.context_path").toString()
+                + request.getAttribute("javax.servlet.forward.servlet_path").toString()
+                + ((pathInfo==null) ? "" : pathInfo.toString())
+                + ((q==null) ? "" : "?" + StringEscapeUtils.escapeHtml(q.toString()));
     }
     
     public void setRequest(HttpServletRequest request) {
