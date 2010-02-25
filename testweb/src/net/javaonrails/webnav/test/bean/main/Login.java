@@ -1,5 +1,5 @@
 /*
- * Copyright all rights reserved by LVUP Shanghai.
+ * 
  * 
  */
 
@@ -22,7 +22,7 @@ public class Login extends BasicBean {
     
     /**
      * This static field should be removed to a base class, this base class
-     * can be inseerted in the real bean and BasicBean like this:
+     * can be inserted in the real bean and BasicBean like this:
      * BasicBean -> BaseBean -> Login
      * the BaseBean can supply some common methods or fields for help.
      */
