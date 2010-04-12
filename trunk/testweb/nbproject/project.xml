@@ -45,7 +45,7 @@
             </web-module-libraries>
             <web-module-additional-libraries/>
             <source-roots>
-                <root id="src.dir" name="源包"/>
+                <root id="src.dir" name="Sources"/>
             </source-roots>
             <test-roots/>
         </data>
