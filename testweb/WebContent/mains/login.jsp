@@ -14,9 +14,9 @@
     <dd><input type="password" id="passwd" name="passwd" /> </dd>
     <dt>Test for array input</dt>
     <dd>
-        <input type="checkbox" id="chkTest" name="chkTest" value="1" /> chkTest1
-        <input type="checkbox" id="chkTest" name="chkTest" value="2" /> chkTest2
-        <input type="checkbox" id="chkTest" name="chkTest" value="3" /> chkTest3
+        <input type="checkbox" id="chkTest1" name="chkTest" value="1" /> chkTest1
+        <input type="checkbox" id="chkTest2" name="chkTest" value="2" /> chkTest2
+        <input type="checkbox" id="chkTest3" name="chkTest" value="3" /> chkTest3
     </dd>
     <dt></dt><dd><input type="submit" name="btnLogin" value="Login" /> </dd>
     </dl>
