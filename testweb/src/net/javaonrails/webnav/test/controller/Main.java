@@ -21,14 +21,17 @@ public class Main extends ControllerBase {
     /**
      * This method will be called in JMapServlet after the controller bean
      * had been instanced and set the request, response and servlet object.
+     * 
+     * if you return false, the mapped action method will not be called
      */
     @Override
     @SuppressWarnings("unchecked")
-    public void init() {
-            this.p = new HashMap();
-            p.put("title", "Title from Index");
-            p.put("pageContent", "/mains/default.jsp");
-            this.getRequest().setAttribute("p", p);
+    public boolean init() {
+        this.p = new HashMap();
+        p.put("title", "Title from Index");
+        p.put("pageContent", "/mains/default.jsp");
+        this.getRequest().setAttribute("p", p);
+        return true;
     }
 
     @SuppressWarnings("unchecked")
