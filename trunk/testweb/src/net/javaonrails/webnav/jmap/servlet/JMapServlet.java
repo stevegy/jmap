@@ -276,10 +276,13 @@ public class JMapServlet extends HttpServlet {
             controller.setResponse(response);
             controller.setActionMethod(clz[1]);
             controller.setUrlHint(clz[2]);
-            controller.init();
-            createBean(m.getAnnotation(CreateBean.class), 
-                    controller);
-            m.invoke(oc);
+            // modified on Jul 21st 2011 the return value is true then these 
+            // actions will go on 
+            if (controller.init()) {
+	            createBean(m.getAnnotation(CreateBean.class), 
+	                    controller);
+	            m.invoke(oc);
+            }
         } catch (ClassNotFoundException e) {
             // 404 response
             response.sendError(HttpServletResponse.SC_NOT_FOUND);

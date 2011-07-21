@@ -38,11 +38,20 @@ public abstract class ControllerBase {
     public abstract void Index();
 
     /**
+     * Modified the return type to boolean on Jul 21st 2011 
+     * You can set the return value to false to indicate the JMap servlet stop 
+     * to call the rest of Bean Annotation creation and mapping method calling.
+     * So, if you should return true if you want these parts running.
+     * This change is for basically user authentication, if the session is not
+     * there, you could return false to skip the rest steps.
+     * 
+     * =======================================================================
      * this method will be called after the setServlet(), setRequest() and 
      * setResponse(). So, in this overrided function, the request, servlet and
      * response are avaiable.
+     * 
      */
-    public abstract void init();
+    public boolean init() { return true; }
 
     /**
      * This method will render the jsp file in the `path' parameter.
