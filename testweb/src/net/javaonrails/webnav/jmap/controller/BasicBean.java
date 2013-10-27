@@ -186,7 +186,10 @@ public abstract class BasicBean {
                         validClass = getBeanValidator().validClassName(a);
                         if(StringUtils.isEmpty(validClass)) 
                             continue;
-                        Class vclass = Class.forName(validClass);
+                        // The Class.forName is not a recommended method
+                        // http://blog.bjhargrave.com/2007/09/classforname-caches-defined-class-in.html
+                        // Class vclass = Class.forName(validClass);
+                        Class vclass = this.getClass().getClassLoader().loadClass(validClass);
                         //Validator v = (Validator) vclass.newInstance();
                         Method m = vclass.getMethod("newInstance");
                         Validator v = (Validator) m.invoke(null);
