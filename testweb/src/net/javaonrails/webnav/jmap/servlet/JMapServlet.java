@@ -152,15 +152,20 @@ public class JMapServlet extends HttpServlet {
      * create this instance and call the abstract method init()
      * if the beanSimpleName contains '.', this name will be treated as full class
      * name, so the beanSimpleName will not add the package prefix name.
+     * 
+     * Mar 8th 2014: replace the Class.forName to getClassLoader.loadClass
+     * This is because the OSGi recommendation for classloader.
+     * refer to: http://blog.bjhargrave.com/2007/09/classforname-caches-defined-class-in.html
+     * 
      * @param beanSimpleName, this is a simple class name, has no package name
-     * @return
+     * @return the BasicBean instance
      */
     public BasicBean createBean(ControllerBase controller, String beanSimpleName) 
             throws InstantiationException, IllegalAccessException, 
             ClassNotFoundException, InvocationTargetException {
         BasicBean bean = null;
         String classname = getBeanClassName(controller, beanSimpleName);
-        Class classbean = Class.forName(classname);
+        Class classbean = this.getClass().getClassLoader().loadClass(classname);
         bean = (BasicBean) classbean.newInstance();
         bean.initFormValues(controller);
         bean.execute();
@@ -248,9 +253,6 @@ public class JMapServlet extends HttpServlet {
      * @param response
      * @throws ServletException
      * @throws IOException
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationExceptiond
      */
     @SuppressWarnings("unchecked")
     protected void processRequest(HttpServletRequest request,
