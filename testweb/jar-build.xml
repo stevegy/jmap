@@ -6,28 +6,28 @@
               as the first entry and export the buildfile again. -->
 <project basedir="." default="build" name="jmap">
     <property environment="env"/>
-    <property name="ECLIPSE_HOME" value="C:/dev/eclipse"/>
-	<property name="CATALINA_HOME" value="C:/Program Files/Apache Software Foundation/Apache Tomcat 6.0.20"/>
+    <property name="ECLIPSE_HOME" value="C:/app/eclipse"/>
+	<property name="CATALINA_HOME" value="C:/app/apache-tomcat-7.0.29"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.5"/>
-    <property name="source" value="1.5"/>
-    <path id="Apache Tomcat v6.0 [Apache Tomcat v6.0].libraryclasspath">
+    <property name="target" value="1.6"/>
+    <property name="source" value="1.6"/>
+    <path id="Tomcat.libraryclasspath">
         <pathelement location="${CATALINA_HOME}/lib/annotations-api.jar"/>
-        <pathelement location="${CATALINE_HOME}/lib/catalina-ant.jar"/>
-        <pathelement location="${CATALINE_HOME}/lib/catalina-ha.jar"/>
-        <pathelement location="${CATALINE_HOME}/lib/catalina-tribes.jar"/>
-        <pathelement location="${CATALINE_HOME}/lib/catalina.jar"/>
-        <pathelement location="${CATALINE_HOME}/lib/el-api.jar"/>
-        <pathelement location="${CATALINE_HOME}/lib/jasper-el.jar"/>
-        <pathelement location="${CATALINE_HOME}/lib/jasper-jdt.jar"/>
-        <pathelement location="${CATALINE_HOME}/lib/jasper.jar"/>
-        <pathelement location="${CATALINE_HOME}/lib/jsp-api.jar"/>
-        <pathelement location="${CATALINE_HOME}/lib/servlet-api.jar"/>
-        <pathelement location="${CATALINE_HOME}/lib/tomcat-coyote.jar"/>
-        <pathelement location="${CATALINE_HOME}/lib/tomcat-dbcp.jar"/>
-        <pathelement location="${CATALINE_HOME}/lib/tomcat-i18n-es.jar"/>
-        <pathelement location="${CATALINE_HOME}/lib/tomcat-i18n-fr.jar"/>
-        <pathelement location="${CATALINE_HOME}/lib/tomcat-i18n-ja.jar"/>
+        <pathelement location="${CATALINA_HOME}/lib/catalina-ant.jar"/>
+        <pathelement location="${CATALINA_HOME}/lib/catalina-ha.jar"/>
+        <pathelement location="${CATALINA_HOME}/lib/catalina-tribes.jar"/>
+        <pathelement location="${CATALINA_HOME}/lib/catalina.jar"/>
+        <pathelement location="${CATALINA_HOME}/lib/el-api.jar"/>
+        <pathelement location="${CATALINA_HOME}/lib/jasper-el.jar"/>
+        <pathelement location="${CATALINA_HOME}/lib/jasper-jdt.jar"/>
+        <pathelement location="${CATALINA_HOME}/lib/jasper.jar"/>
+        <pathelement location="${CATALINA_HOME}/lib/jsp-api.jar"/>
+        <pathelement location="${CATALINA_HOME}/lib/servlet-api.jar"/>
+        <pathelement location="${CATALINA_HOME}/lib/tomcat-coyote.jar"/>
+        <pathelement location="${CATALINA_HOME}/lib/tomcat-dbcp.jar"/>
+        <pathelement location="${CATALINA_HOME}/lib/tomcat-i18n-es.jar"/>
+        <pathelement location="${CATALINA_HOME}/lib/tomcat-i18n-fr.jar"/>
+        <pathelement location="${CATALINA_HOME}/lib/tomcat-i18n-ja.jar"/>
     </path>
     <path id="Web App Libraries.libraryclasspath">
         <pathelement location="WebContent/WEB-INF/lib/commons-beanutils-1.8.0.jar"/>
@@ -37,14 +37,13 @@
         <pathelement location="WebContent/WEB-INF/lib/commons-io-1.4.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/commons-lang-2.4.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/commons-logging-1.1.1.jar"/>
-        <pathelement location="WebContent/WEB-INF/lib/jstl.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/log4j-1.2.15.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/standard.jar"/>
     </path>
     <path id="EAR Libraries.libraryclasspath"/>
     <path id="jmap.classpath">
         <pathelement location="build/classes"/>
-        <path refid="Apache Tomcat v6.0 [Apache Tomcat v6.0].libraryclasspath"/>
+        <path refid="Tomcat.libraryclasspath"/>
         <path refid="Web App Libraries.libraryclasspath"/>
         <path refid="EAR Libraries.libraryclasspath"/>
     </path>
@@ -78,6 +77,8 @@
 		<jar destfile="dist/jmap.jar" >
 			<fileset dir="build/classes">
 				<exclude name="net/javaonrails/webnav/test/**" />
+                <exclude name="commons-logging.properties" />
+                <exclude name="log4j.properties" />
 			</fileset>
 		</jar>
 	</target>
