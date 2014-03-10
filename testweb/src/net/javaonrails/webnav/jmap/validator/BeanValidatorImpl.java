@@ -68,7 +68,7 @@ public class BeanValidatorImpl implements BeanValidator{
             String vclass = validClassName(a);
             if (StringUtils.isNotEmpty(vclass)) {
                 try {
-                    Class rvc = Class.forName(vclass);
+                    Class rvc = this.getClass().getClassLoader().loadClass(vclass);
                     rv = (Validator) rvc.newInstance();
                 } catch (ClassNotFoundException classNotFoundException) {
                     logger.error("Cannot find the validator class you defined in the Required annotation --> " + vclass, classNotFoundException);
