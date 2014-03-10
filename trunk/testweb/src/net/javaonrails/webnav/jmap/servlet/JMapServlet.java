@@ -216,7 +216,7 @@ public class JMapServlet extends HttpServlet {
      * the controller Class.
      * 
      * @param servletPath
-     * @return the full name with package name and you can use Class.forName
+     * @return the full name with package name and you can use ClassLoader.loadClass
      * to find the Class.
      */
     protected String findControllerClassName(String servletPath) {
@@ -266,7 +266,7 @@ public class JMapServlet extends HttpServlet {
 
             String[] clz = getAction(request);
 
-            Class controllerClass = Class.forName(getPrefixPackageName() 
+            Class controllerClass = this.getClass().getClassLoader().loadClass(getPrefixPackageName() 
                     + CONTROLLER_PACKAGE + clz[0]);
 
             Method m = controllerClass.getMethod(clz[1]);
