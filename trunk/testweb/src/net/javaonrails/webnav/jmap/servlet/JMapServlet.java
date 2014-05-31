@@ -127,9 +127,10 @@ public class JMapServlet extends HttpServlet {
             String httpMethod = controller.getRequest().getMethod();
             if(httpm != null) {
                 for(String method : httpm) {
-                    httpMethod.equals(method);
-                    createOnHttpMethod = true;
-                    break;
+                    if(httpMethod.equals(method)) {
+                        createOnHttpMethod = true;
+                        break;
+                    }
                 }
             }
             if(logger.isDebugEnabled())
