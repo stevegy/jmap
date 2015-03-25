@@ -37,3 +37,5 @@
 ehthumbs.db
 Thumbs.db
 
+/jmap/jmap-core/target/
+/jmap/jmap-testweb/target/
