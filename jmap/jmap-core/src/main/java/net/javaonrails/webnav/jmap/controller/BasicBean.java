@@ -105,7 +105,9 @@ public abstract class BasicBean {
         
         this.controller = controller;
         
-        Map param = this.controller.getRequest().getParameterMap();
+        Map<String, String[]> param = this.controller.getRequest().getParameterMap();
+        // TODO: ESAPI filter the XSS input vlaues
+        // http://www.javadoc.io/doc/org.owasp.esapi/esapi/2.1.0.1 
         BeanUtils.populate(this, param);
         validateFormMap(param);
     }

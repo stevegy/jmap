@@ -37,10 +37,11 @@ public class JMapServlet extends HttpServlet {
     private String characterEncoding;
 
     private String contentType;
+    private String xframeOptions = null;
 
     /**
-     * @see HttpServlet#HttpServlet()
-     */
+     * @see HttpServlet#HttpServlet()     */
+
     public JMapServlet() {
         super();
         // TODO Auto-generated constructor stub
@@ -54,6 +55,7 @@ public class JMapServlet extends HttpServlet {
         super.init(config);
         this.characterEncoding = config.getInitParameter("CharacterEncoding");
         this.contentType = config.getInitParameter("ContentType");
+        this.xframeOptions = config.getInitParameter("X-Frame-Options");
         if (this.characterEncoding == null) {
             this.characterEncoding = "UTF-8";
         }
@@ -272,6 +274,11 @@ public class JMapServlet extends HttpServlet {
             // The Sun AppServer should implement this setContentType call.
             response.setContentType(contentType);
             request.setCharacterEncoding(characterEncoding);
+            
+            // X-Frame-Options to prevent Clickjacking 
+            // refer to https://www.owasp.org/index.php/Clickjacking_Protection_for_Java_EE
+            if(this.xframeOptions != null)
+                response.setHeader("X-Frame-Options", this.xframeOptions);
 
             String[] clz = getAction(request);
 
