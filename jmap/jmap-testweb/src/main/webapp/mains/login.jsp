@@ -6,7 +6,7 @@
 <p>chkTest value is ${MainLogin.chkTest[0]}, ${MainLogin.chkTest[1]}, ${MainLogin.chkTest[2]}</p>
 <p>QueryString is <%=request.getQueryString()%></p>
 <div>
-    <form id="frmLogin" name="frmLogin" method="post" action="${MainLogin.controller.formAction}">
+    <form id="frmLogin" name="frmLogin" method="post" action="<c:out value="${MainLogin.controller.formAction}"/>">
     <dl>
     <dt>Login name</dt>
     <dd><input type="text" id="loginName" name="loginName" value="<c:out value="${MainLogin.loginName}"/>"/></dd>
