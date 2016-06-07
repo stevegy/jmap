@@ -9,3 +9,6 @@ and its execute() method will be called. This Bean instance will be set into the
 The controller class package-prefix.controller.Main method Login() will be called.
 
 Intresting? :) go to Wiki page or checkout the source code to see what happen...
+
+Important Note: 
+Considering the CVE-2014-0114 (http://www.cvedetails.com/cve/CVE-2014-0114/), please upgrade to use commons-beanutils 1.9.2 and above.
