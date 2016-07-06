@@ -22,7 +22,9 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.beanutils.SuppressPropertiesBeanIntrospector;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -41,6 +43,13 @@ public abstract class BasicBean {
     private ControllerBase controller = null;
     
     public static Log logger = LogFactory.getLog(BasicBean.class);
+    
+    // http://www.cvedetails.com/cve/CVE-2014-0114/
+    // https://issues.apache.org/jira/browse/BEANUTILS-463 
+    // http://commons.apache.org/proper/commons-beanutils/javadocs/v1.9.2/RELEASE-NOTES.txt
+    static {
+        BeanUtilsBean.getInstance().getPropertyUtils().addBeanIntrospector(SuppressPropertiesBeanIntrospector.SUPPRESS_CLASS);
+    }    
     
     public boolean isFormValid() {
         return this.formValid;
@@ -106,9 +115,9 @@ public abstract class BasicBean {
         this.controller = controller;
         
         Map<String, String[]> param = this.controller.getRequest().getParameterMap();
-        // TODO: ESAPI filter the XSS input vlaues
-        // http://www.javadoc.io/doc/org.owasp.esapi/esapi/2.1.0.1 
-        BeanUtils.populate(this, param);
+        // http://commons.apache.org/proper/commons-beanutils/javadocs/v1.9.2/RELEASE-NOTES.txt
+        // must use a different instanse of SuppressPropertiesBeanIntrospector
+        BeanUtilsBean.getInstance().populate(this, param);
         validateFormMap(param);
     }
 
