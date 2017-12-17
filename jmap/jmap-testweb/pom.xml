@@ -51,7 +51,7 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>jmap-core</artifactId>
-      <version>1.0.80-SNAPSHOT</version>
+      <version>1.0.81-SNAPSHOT</version>
     </dependency>
   </dependencies>
 

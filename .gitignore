@@ -37,5 +37,10 @@
 ehthumbs.db
 Thumbs.db
 
+#Eclipse settings
+.settings
+.project
+.classpath
+
 /jmap/jmap-core/target/
 /jmap/jmap-testweb/target/
