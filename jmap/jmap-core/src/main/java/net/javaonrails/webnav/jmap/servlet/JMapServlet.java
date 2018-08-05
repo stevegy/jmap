@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
+import org.apache.commons.beanutils.ConstructorUtils;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 import net.javaonrails.webnav.jmap.controller.ControllerBase;
@@ -149,9 +150,10 @@ public class JMapServlet extends HttpServlet {
                 bean = createBean(controller, beanClassname);
                 controller.getRequest().setAttribute(attrName, bean);
             }
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | NoSuchMethodException e) {
             // do nothing
-            logger.info("Cannot find the bean class " + beanClassname);
+            logger.info("The bean class " + beanClassname +
+            		" is not found with default mapping rules.");
         }
         return bean;
     }
@@ -170,14 +172,15 @@ public class JMapServlet extends HttpServlet {
      *
      * @param beanSimpleName, this is a simple class name, has no package name
      * @return the BasicBean instance
+     * @throws NoSuchMethodException 
      */
     public BasicBean createBean(ControllerBase controller, String beanSimpleName)
             throws InstantiationException, IllegalAccessException,
-            ClassNotFoundException, InvocationTargetException {
+            ClassNotFoundException, InvocationTargetException, NoSuchMethodException {
         BasicBean bean = null;
         String classname = getBeanClassName(controller, beanSimpleName);
-        Class classbean = this.getClass().getClassLoader().loadClass(classname);
-        bean = (BasicBean) classbean.newInstance();
+        Class<?> classbean = this.getClass().getClassLoader().loadClass(classname);
+        bean = (BasicBean) ConstructorUtils.invokeConstructor(classbean, null);
         bean.initFormValues(controller);
         bean.execute();
         return bean;
@@ -265,7 +268,6 @@ public class JMapServlet extends HttpServlet {
      * @throws ServletException
      * @throws IOException
      */
-    @SuppressWarnings("unchecked")
     protected void processRequest(HttpServletRequest request,
             HttpServletResponse response)
             throws ServletException, IOException {
@@ -282,12 +284,12 @@ public class JMapServlet extends HttpServlet {
 
             String[] clz = getAction(request);
 
-            Class controllerClass = this.getClass().getClassLoader().loadClass(getPrefixPackageName()
+            Class<?> controllerClass = this.getClass().getClassLoader().loadClass(getPrefixPackageName()
                     + CONTROLLER_PACKAGE + clz[0]);
 
             Method m = controllerClass.getMethod(clz[1]);
 
-            Object oc = controllerClass.newInstance();
+            Object oc = ConstructorUtils.invokeConstructor(controllerClass, null);
             ControllerBase controller = (ControllerBase) oc;
             controller.setServlet(this);
             controller.setRequest(request);

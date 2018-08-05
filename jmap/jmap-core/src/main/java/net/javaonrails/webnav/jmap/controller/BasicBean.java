@@ -21,7 +21,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.SuppressPropertiesBeanIntrospector;
@@ -50,6 +49,10 @@ public abstract class BasicBean {
     static {
         BeanUtilsBean.getInstance().getPropertyUtils().addBeanIntrospector(SuppressPropertiesBeanIntrospector.SUPPRESS_CLASS);
     }    
+    
+    public BasicBean() {
+    	/* default constructor */
+    }
     
     public boolean isFormValid() {
         return this.formValid;
@@ -108,7 +111,6 @@ public abstract class BasicBean {
      * @throws java.lang.IllegalAccessException
      * @throws java.lang.reflect.InvocationTargetException
      */
-    @SuppressWarnings("unchecked")
     public void initFormValues(ControllerBase controller) 
             throws IllegalAccessException, InvocationTargetException {
         
@@ -116,7 +118,7 @@ public abstract class BasicBean {
         
         Map<String, String[]> param = this.controller.getRequest().getParameterMap();
         // http://commons.apache.org/proper/commons-beanutils/javadocs/v1.9.2/RELEASE-NOTES.txt
-        // must use a different instanse of SuppressPropertiesBeanIntrospector
+        // must use a different instance of SuppressPropertiesBeanIntrospector
         BeanUtilsBean.getInstance().populate(this, param);
         validateFormMap(param);
     }
@@ -170,20 +172,20 @@ public abstract class BasicBean {
         this.controller = controller;
     }
     
-    protected static BeanValidator beanValidator = null;
+    protected static BeanValidator<BasicBean> beanValidator = null;
     
-    public BeanValidator getBeanValidator() {
+    public BeanValidator<BasicBean> getBeanValidator() {
         if(beanValidator == null)
             beanValidator = new BeanValidatorImpl();
         return beanValidator;
     }
 
     @SuppressWarnings("unchecked")
-    protected void validateFormMap(Map param) 
+    protected void validateFormMap(Map<String, String[]> param) 
             throws InvocationTargetException, 
             SecurityException, 
             IllegalArgumentException, IllegalAccessException {
-        Iterator it = param.keySet().iterator();
+        Iterator<String> it = param.keySet().iterator();
         while (it.hasNext()) {
             String key = (String) it.next();
             String[] value = (String[]) param.get(key);
@@ -200,10 +202,9 @@ public abstract class BasicBean {
                         // The Class.forName is not a recommended method
                         // http://blog.bjhargrave.com/2007/09/classforname-caches-defined-class-in.html
                         // Class vclass = Class.forName(validClass);
-                        Class vclass = this.getClass().getClassLoader().loadClass(validClass);
-                        //Validator v = (Validator) vclass.newInstance();
+                        Class<?> vclass = this.getClass().getClassLoader().loadClass(validClass);
                         Method m = vclass.getMethod("newInstance");
-                        Validator v = (Validator) m.invoke(null);
+                        Validator<Annotation> v = (Validator<Annotation>) m.invoke(null);
                         List<ErrorMessage> msgs = 
                                 v.validate(a, key, value, 
                                 getController().getLocale());

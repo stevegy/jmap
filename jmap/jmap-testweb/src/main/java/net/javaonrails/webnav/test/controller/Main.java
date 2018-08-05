@@ -16,7 +16,7 @@ public class Main extends ControllerBase {
      * This is an arbitrary variable name. This map will be initialized by the
      * servlet and put into the request scope and used by content include. 
      */
-    private HashMap p = null;
+    private HashMap<String, Object> p = null;
 
     /**
      * This method will be called in JMapServlet after the controller bean
@@ -25,16 +25,14 @@ public class Main extends ControllerBase {
      * if you return false, the mapped action method will not be called
      */
     @Override
-    @SuppressWarnings("unchecked")
     public boolean init() {
-        this.p = new HashMap();
+        this.p = new HashMap<String, Object>();
         p.put("title", "Title from Index");
         p.put("pageContent", "/mains/default.jsp");
         this.getRequest().setAttribute("p", p);
         return true;
     }
 
-    @SuppressWarnings("unchecked")
     public void Index() {
         try {
             // supply the basic bean class and deal with the file upload or 
@@ -60,7 +58,6 @@ public class Main extends ControllerBase {
     }
     
     //@CreateBean(beanClassName="com.lvup.webnav.test.bean.main.Login", requestAttrName="MainLogin")
-    @SuppressWarnings("unchecked")
     public void Login() {
         try {
             // Login login = (Login) createBean();
@@ -78,7 +75,6 @@ public class Main extends ControllerBase {
     }
     
     @CreateBean(createOnHttpMethod={"POST"})
-    @SuppressWarnings("unchecked")
     public void Upload() {
         try {
             if("POST".equals(getRequest().getMethod())) {
@@ -95,7 +91,6 @@ public class Main extends ControllerBase {
         }
     }
     
-    @SuppressWarnings("unchecked")
     public void Dynalist() {
         try {
             p.put("pageContent", "/mains/ajax-dynalist.jsp");

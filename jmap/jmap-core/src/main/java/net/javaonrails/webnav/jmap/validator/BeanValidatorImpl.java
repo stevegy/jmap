@@ -5,6 +5,7 @@
 
 package net.javaonrails.webnav.jmap.validator;
 
+import net.javaonrails.webnav.jmap.controller.BasicBean;
 import net.javaonrails.webnav.jmap.validator.annotation.MaxLength;
 import net.javaonrails.webnav.jmap.validator.annotation.MinLength;
 import net.javaonrails.webnav.jmap.validator.annotation.Required;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.reflect.ConstructorUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -24,7 +26,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author steve
  */
-public class BeanValidatorImpl implements BeanValidator{
+public class BeanValidatorImpl implements BeanValidator<BasicBean>{
 
     public static Log logger = LogFactory.getLog(BeanValidatorImpl.class);
     
@@ -32,7 +34,9 @@ public class BeanValidatorImpl implements BeanValidator{
         
     }
     
-    public List<ErrorMessage> validate(Object bean, Locale locale) {
+	@Override
+    public List<ErrorMessage> validate(BasicBean bean, Locale locale) 
+    		throws IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
         List<ErrorMessage> msg = null;
         Field[] fields = bean.getClass().getDeclaredFields();
         // the declared fields not include the inherit fields
@@ -62,14 +66,15 @@ public class BeanValidatorImpl implements BeanValidator{
         return vclass;
     }
     
-    private List<ErrorMessage> validAnnotations(Annotation[] annotations, Field field, Object bean, Locale locale, List<ErrorMessage> msg) {
+    private List<ErrorMessage> validAnnotations(Annotation[] annotations, Field field, Object bean, Locale locale, List<ErrorMessage> msg) 
+    			throws IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
         for (Annotation a : annotations) {
-            Validator rv = null;
+            Validator<Annotation> rv = null;
             String vclass = validClassName(a);
             if (StringUtils.isNotEmpty(vclass)) {
                 try {
-                    Class rvc = this.getClass().getClassLoader().loadClass(vclass);
-                    rv = (Validator) rvc.newInstance();
+                    Class<?> rvc = this.getClass().getClassLoader().loadClass(vclass);
+                    rv = (Validator<Annotation>) ConstructorUtils.invokeConstructor(rvc, null);
                 } catch (ClassNotFoundException classNotFoundException) {
                     logger.error("Cannot find the validator class you defined in the Required annotation --> " + vclass, classNotFoundException);
                 } catch (InstantiationException instantiationException) {
@@ -83,11 +88,10 @@ public class BeanValidatorImpl implements BeanValidator{
         return msg;
     }
 
-    @SuppressWarnings("unchecked")
     private List<ErrorMessage> validMessage(Field field, Object bean, 
-            Validator rv, Annotation a, Locale locale, List<ErrorMessage> msg) {
+            Validator<Annotation> rv, Annotation a, Locale locale, List<ErrorMessage> msg) {
         try {
-            Class fieldType = field.getType();
+            Class<?>fieldType = field.getType();
             ErrorMessage emsg = null;
             if (fieldType.getName().indexOf("[") > -1) {
                 Object[] ov = (Object[]) PropertyUtils.getProperty(bean, field.getName());
@@ -114,5 +118,6 @@ public class BeanValidatorImpl implements BeanValidator{
         }
         return msg;
     }
+
 
 }

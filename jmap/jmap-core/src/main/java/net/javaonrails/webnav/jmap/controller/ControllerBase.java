@@ -31,6 +31,10 @@ public abstract class ControllerBase {
 
     public static Log logger = LogFactory.getLog(ControllerBase.class);
 
+    public ControllerBase() {
+    	/* necessary for ConstructorUtils to find the default constructor */
+    }
+    
     /**
      * This method is for the "/" uri
      *
@@ -41,15 +45,15 @@ public abstract class ControllerBase {
     /**
      * Modified the return type to boolean on Jul 21st 2011 You can set the
      * return value to false to indicate the JMap servlet stop to call the rest
-     * of Bean Annotation creation and mapping method calling. So, if you should
+     * of Bean Annotation creation and mapping method calling. So, you should
      * return true if you want these parts running. This change is for basically
      * user authentication, if the session is not there, you could return false
      * to skip the rest steps.
      *
      * =======================================================================
      * this method will be called after the setServlet(), setRequest() and
-     * setResponse(). So, in this overrided function, the request, servlet and
-     * response are avaiable.
+     * setResponse(). So, in this override function, the request, servlet and
+     * response are available.
      *
      */
     public boolean init() {
@@ -83,9 +87,10 @@ public abstract class ControllerBase {
      * @throws java.lang.IllegalAccessException
      * @throws java.lang.ClassNotFoundException
      * @throws java.lang.reflect.InvocationTargetException
+     * @throws NoSuchMethodException 
      */
     public BasicBean createBean() throws InstantiationException,
-            IllegalAccessException, ClassNotFoundException, InvocationTargetException {
+            IllegalAccessException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException {
         return getServlet().createBean(this, this.getActionMethod());
     }
     
