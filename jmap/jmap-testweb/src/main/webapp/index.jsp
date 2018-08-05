@@ -9,5 +9,6 @@
     </head>
     <body>
         <h1>Hello World!</h1>
+        <p><a href="${pageContext.request.contextPath}/main/">Test page here.</a></p>
     </body>
 </html>
