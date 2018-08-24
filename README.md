@@ -1,5 +1,7 @@
 # JMap
-Automatically exported from code.google.com/p/jmap, due to Google decided to close the code.google.com.
+Automatically exported from code.google.com/p/jmap, due to Google decided to close the code.google.com. 
+
+I would take this as MIT license.
 
 JMap is a Rails like Java web application framework started from 2008. Check the [Wiki](https://github.com/stevegy/jmap/wiki) for simple user guide.
 
