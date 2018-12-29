@@ -1,3 +1,14 @@
+.gradle
+**/build/
+**/bin/
+**/test-output/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Cache of project
+.gradletasknamecache
+
 # Compiled source #
 ###################
 *.com
@@ -42,5 +53,7 @@ Thumbs.db
 .project
 .classpath
 
-/jmap/jmap-core/target/
-/jmap/jmap-testweb/target/
+**/target/
+
+# MUST AFTER ignore for *.jar to Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!/app/gradle/wrapper/gradle-wrapper.jar
