@@ -1,0 +1,32 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'war'
+
+group = 'net.javaonrails'
+version = '1.0-SNAPSHOT'
+
+description = """jmap-testweb"""
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+
+repositories {
+        
+     maven { url "http://repo.maven.apache.org/maven2" }
+     mavenLocal()
+}
+dependencies {
+    compile group: 'commons-fileupload', name: 'commons-fileupload', version:'1.3.3'
+    compile group: 'commons-beanutils', name: 'commons-beanutils', version:'1.9.2'
+    compile group: 'commons-configuration', name: 'commons-configuration', version:'1.10'
+    compile group: 'log4j', name: 'log4j', version:'1.2.14'
+    compile group: 'javax.servlet', name: 'jstl', version:'1.2'
+    compile group: 'net.javaonrails', name: 'jmap-core', version:'1.0.81-SNAPSHOT'
+    // compile files('../jmap-core/build/libs/jmap-core-1.0.81-SNAPSHOT.jar')
+    providedCompile group: 'javax.servlet', name: 'servlet-api', version:'2.5'
+    providedCompile group: 'javax.servlet.jsp', name: 'jsp-api', version:'2.1'
+}
