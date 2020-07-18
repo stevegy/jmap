@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.javaonrails</groupId>
     <artifactId>jmap-core</artifactId>
-    <version>1.0.81-SNAPSHOT</version>
+    <version>1.0.82-SNAPSHOT</version>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
@@ -16,14 +16,14 @@
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <version>1.9.2</version>
+            <version>1.9.4</version>
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-            <version>1.3.3</version>
+            <version>1.4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

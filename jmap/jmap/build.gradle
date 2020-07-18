@@ -16,7 +16,7 @@ subprojects {
   
   repositories {
     mavenLocal()
-    
+    jcenter()
     maven { url "http://repo.maven.apache.org/maven2" }
   }
 

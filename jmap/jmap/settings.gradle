@@ -1,1 +1,3 @@
 rootProject.name = 'jmap'
+include '../jmap-core'
+include '../jmap-testweb'
