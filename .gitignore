@@ -59,4 +59,4 @@ Thumbs.db
 **/target/
 
 # MUST AFTER ignore for *.jar to Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
-!/app/gradle/wrapper/gradle-wrapper.jar
+!jmap/jmap/gradle/wrapper/gradle-wrapper.jar
